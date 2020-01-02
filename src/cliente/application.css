@@ -33,6 +33,27 @@
     -fx-text-fill: black;
 }
 
+.buttonAmarillo {
+	-fx-background-color: 
+        #ff971d,
+        linear-gradient(#ff971d 50.0%, white 100.0%),
+        radial-gradient(center 50.0% -40.0%, radius 200.0%, #ff971d 45.0%, rgba(230.0,230.0,230.0,0.0) 50.0%);
+    -fx-background-radius: 20.0;
+    -fx-background-insets: 0.0,1.0,1.0;
+    -fx-text-fill: black;
+    -fx-effect: dropshadow( gaussian, rgba(0.0, 0.0, 0.0, 0.1), 10.0, 0.5, 0.0, 0.0 );
+}
+
+.buttonAmarillo:hover {
+	-fx-background-color: 
+        #f58e15,
+        linear-gradient(ff7315 50.0%, #f58e15 100.0%),
+        radial-gradient(center 50.0% -40.0%, radius 200.0%, #f58e15 45.0%, rgba(230.0,230.0,230.0,0.0) 50.0%);
+    -fx-background-radius: 20.0;
+    -fx-background-insets: 0.0,1.0,1.0;
+    -fx-text-fill: black;
+}
+
 .buttonVerde {
 	-fx-background-color: 
         rgb(35.0, 184.0, 34.0),
@@ -117,12 +138,6 @@
 			
 }
 
-#subAdmin{
-	-fx-background-color:rgb(20.0, 80.0, 100.0);
-	-fx-effect: dropshadow( gaussian, rgba(0.0, 0.0, 0.0, 0.2), 10.0, 0.5, 0.0, 0.0 );
-				
-}
-
 .anchorSub{
 	-fx-background-color: linear-gradient(rgb(20.0, 70.0, 90.0) 50.0%, rgb(40.0, 50.0, 70.0) 100.0%);
 	-fx-effect: dropshadow( gaussian, rgba(0.0, 0.0, 0.0, 0.2), 15.0, 0.5, 0.0, 0.0 );
@@ -148,13 +163,6 @@
 	-fx-background-radius: 20.0 20.0 20.0 20.0;
 	-fx-effect: dropshadow( gaussian, rgba(0.0, 0.0, 0.0, 0.2), 10.0, 0.5, 0.0, 0.0 );
 }
-
-.separator *.line {
-    -fx-border-style: solid;
-    -fx-border-width: 0.0 0.0 1.0 0.0; 
-    -fx-border-color: white;
-}
-
 .label{
 	-fx-text-fill: black;
 }

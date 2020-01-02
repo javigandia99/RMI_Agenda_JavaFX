@@ -18,105 +18,123 @@ import javafx.scene.control.TextField;
 import servidor.ServidorAgenda;
 
 public class ControllerVAgenda extends Controller {
-	private ServidorAgenda model;
+	private ServidorAgenda server;
 	@FXML
-	private Button btnMenuAdmin;
+	private Button btnBuscar;
 	@FXML
-	private Button btnMenuListadoPaciente;
+	private Button btnRegistrarContacto;
 	@FXML
-	private Button btnBuscador;
+	private Button btnModificarContacto;
 	@FXML
-	private Button btnRegistrarPaciente;
+	private Button btnBorrarContacto;
 	@FXML
-	private Button btnModificarPaciente;
-	@FXML
-	private Button btnBorrarPaciente;
+	private Button btnBorrarTODOS;
 	@FXML
 	private Button btnRefrescar;
 	@FXML
-	private TextField txtBuscarPaciente;
+	private Button btnPerfil;
+	@FXML
+	private Button btnCerrarSesion;
+	@FXML
+	private TextField txtBuscarContacto;
 	@FXML
 	private TableView tableView;
+
 	private ObservableList<ObservableList> data;
 
 	@FXML
 	private void initialize() {
-		model.setTablaContactos(tableView);
+		server.setTablaContactos(tableView);
 		refresh(null);
 	}
 
-	public ServidorAgenda getModel() {
-		return model;
+	public ServidorAgenda getServer() {
+		return server;
 	}
 
-	public void setModel(ServidorAgenda model) {
-		this.model = model;
+	public void setServer(ServidorAgenda server) {
+		this.server = server;
 	}
 
 	public ControllerVAgenda() {
-		ServidorAgenda model = new ServidorAgenda();
-		this.model = model;
+		ServidorAgenda server = new ServidorAgenda();
+		this.server = server;
 		data = FXCollections.observableArrayList();
 		tableView = new TableView();
-	}
-
-	public void clickRefrescar(ActionEvent event) {
-		refresh(null);
-	}
-
-	public void BuscarPaciente(ActionEvent event) {
-		consultar("SELECT * FROM contacs WHERE name LIKE '%" + txtBuscarPaciente.getText() + "%'", tableView, data);
 	}
 
 	public TableView getTableView() {
 		return tableView;
 	}
 
-	public void borrarPaciente(ActionEvent event) {
+	public void clickNuevoContacto(ActionEvent event) {
+		selecionado = -1;
+		mostrarVentana(event, (Node) event.getSource(), "Contacto.fxml", "Nuevo Contacto", false, false);
+	}
+
+	public void clickModificarContacto(ActionEvent event) {
+		selecionado = tableView.getSelectionModel().getSelectedIndex();
+		if (selecionado != -1) {
+			mostrarVentana(event, (Node) event.getSource(), "Contacto.fxml", "Modificar Contacto", false, false);
+			refresh(event);
+		} else {
+			dialog(AlertType.WARNING, "Alerta", "No hay ninguna fila seleccionada",
+					"Seleccione una fila para continuar");
+		}
+	}
+
+	public void clickBorrarContacto(ActionEvent event) {
 		selecionado = tableView.getSelectionModel().getSelectedIndex();
 		if (selecionado != -1) {
 
 			TablePosition pos = (TablePosition) tableView.getSelectionModel().getSelectedCells().get(0);
 			int row = pos.getRow();
 			// TableColumn col = pos.getTableColumn();
-			TableColumn col = (TableColumn) tableView.getColumns().get(3);
+			TableColumn col = (TableColumn) tableView.getColumns().get(4);
 			String data = (String) col.getCellObservableValue(row).getValue();
 
-			Alert alert = new Alert(AlertType.CONFIRMATION);
-			alert.setTitle("Borrar paciente");
-			alert.setHeaderText("");
-			alert.setContentText("Â¿Estas seguro de eliminar el paciente " + data);
-			Optional<ButtonType> option = alert.showAndWait();
+			// alert to confirm
+			Optional<ButtonType> option = dialog(AlertType.CONFIRMATION, "Borrar contacto", "",
+					"¿Estas seguro de eliminar el numero: " + data);
 
 			if (option.get() == ButtonType.OK) {
-				System.out.println("contacto borrado");
-				//borrarContacto del servidor
-				//model.borrarContacto("0tt", "0tt", data);
+				server.borrarContacto(Integer.parseInt(data));
+				System.out.println("contacto con numero: " + data + " borrado");
 			}
 			refresh(null);
 		} else {
-			dialog("Cuidado", "No hay ninguna fila seleccionada", "Seleccione una fila para continuar");
+			dialog(AlertType.WARNING, "Cuidado", "No hay ninguna fila seleccionada",
+					"Seleccione una fila para continuar");
 		}
 	}
 
-	public void clickNewPaciente(ActionEvent event) {
-		selecionado = -1;
-		mostrarVentana(event, (Node) event.getSource(), "../vistas/RegistroPaciente.fxml", "Nuevo Paciente", false,
-				false);
+	public void clickBorrarTODOSContactos(ActionEvent event) {
+		// alert to confirm
+		Optional<ButtonType> option = dialog(AlertType.CONFIRMATION, "Borrar contacto", "",
+				"¿Estas seguro de querer eliminar todos los contactos?, No habra vuelta atras");
+		if (option.get() == ButtonType.OK) {
+			server.borrarTodo();
+		}
+		refresh(null);
 	}
 
-	public void clickModificarPaciente(ActionEvent event) {
-		selecionado = tableView.getSelectionModel().getSelectedIndex();
-		if (selecionado != -1) {
-			mostrarVentana(event, (Node) event.getSource(), "../vistas/RegistroPaciente.fxml", "Nuevo Paciente", false,
-					false);
-			refresh(event);
-		} else {
-			dialog("Alerta", "No hay ninguna fila seleccionada", "Seleccione una fila para continuar");
-		}
+	public void buscarContacto(ActionEvent event) {
+		search("SELECT * FROM contacts WHERE name LIKE '%" + txtBuscarContacto.getText() + "%'", tableView, data);
+	}
+
+	public void clickRefrescar(ActionEvent event) {
+		refresh(null);
 	}
 
 	public void refresh(ActionEvent event) {
-		consultar("SELECT * FROM contacts", tableView, data);
+		search("SELECT * FROM contacts", tableView, data);
+	}
+
+	public void clickPerfil(ActionEvent event) {
+		cerrarSesion(event);
+	}
+
+	public void clickCerrarSesion(ActionEvent event) {
+		cerrarSesion(event);
 	}
 }

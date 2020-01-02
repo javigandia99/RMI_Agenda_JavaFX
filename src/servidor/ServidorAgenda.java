@@ -45,7 +45,6 @@ public class ServidorAgenda implements Interfaz, Remote {
 		output = null;
 		login = false;
 		correctUsername = "";
-		tablaContactos = new TableView();
 		getConnection();
 	}
 
@@ -57,7 +56,6 @@ public class ServidorAgenda implements Interfaz, Remote {
 		try {
 			Class.forName(driver);
 			conexione = DriverManager.getConnection(url, user, pass);
-			System.out.println("CONEXIÓN CON BBDD SQL CORRECTA");
 		} catch (ClassNotFoundException e) {
 			System.out.println("ERROR: DRIVER ");
 			System.exit(-1);
@@ -97,7 +95,7 @@ public class ServidorAgenda implements Interfaz, Remote {
 	}
 
 	@Override
-	public boolean registrarCliente(String username, String password, String name, String surname) {
+	public boolean registrarUsuario(String username, String password, String name, String surname) {
 		String query = "INSERT INTO users (username, password, name, surname) VALUES (?, ?, ?, ?)";
 		try {
 			PreparedStatement stmt = conexione.prepareStatement(query);
@@ -115,10 +113,40 @@ public class ServidorAgenda implements Interfaz, Remote {
 		return false;
 	}
 
+	// Comprueba si existe un usuario
+	public boolean existeUsuario(String username) throws SQLException {
+		String query = "SELECT username FROM users WHERE username LIKE ?";
+		PreparedStatement stmt = conexione.prepareStatement(query);
+		stmt.setString(1, username);
+		ResultSet rset = stmt.executeQuery();
+		boolean exist = rset.next();
+		rset.close();
+		stmt.close();
+		if (exist) {
+			return true;
+		} else {
+			return false;
+		}
+	}
+
+	@Override
+	public boolean borrarUsuario(String username) throws RemoteException {
+		try {
+			String query = "DELETE FROM users WHERE username LIKE ?";
+			PreparedStatement stmt = conexione.prepareStatement(query);
+			stmt.setString(1, username);
+			stmt.executeUpdate();
+			stmt.close();
+			return true;
+		} catch (Exception e) {
+			System.out.println(e);
+			return false;
+		}
+
+	}
+
 	public void setTablaContactos(TableView<?> tableView) {
 		this.tablaContactos = tableView;
-		System.out.println("-> ini: " + tableView);
-		System.out.println("contactos . " + tablaContactos);
 	}
 
 	public void refreshContactos() {
@@ -127,7 +155,6 @@ public class ServidorAgenda implements Interfaz, Remote {
 
 	@Override
 	public String iniciarSesion(String username, String password) {
-		String state = null;
 		String correctUsername = " ";
 		String correctPassword = " ";
 
@@ -149,11 +176,11 @@ public class ServidorAgenda implements Interfaz, Remote {
 		login = correctUsername.equals(username) && correctPassword.equals(password);
 		if (login) {
 			this.correctUsername = correctUsername;
-			state = correctUsername.toString() + " Iniciado sesion";
+			return correctUsername.toString() + " Iniciado sesion";
 		} else {
-			state = "Username o password incorrecto";
+			return "Username o password incorrecto";
 		}
-		return state;
+
 	}
 
 	public boolean isLogin() {
@@ -192,14 +219,6 @@ public class ServidorAgenda implements Interfaz, Remote {
 		return listadobd;
 
 	}
-
-	/*
-	public String buscarContacto(HashMap<Integer, Contactos> lista, String name) {
-		Map<Integer, Contactos> filtermap = lista.entrySet().stream()
-				.filter(s -> s.getValue().getName().equalsIgnoreCase(name))
-				.collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
-		return filtermap.toString();
-	}*/
 
 	@Override
 	public String insertarContacto(String name, String surname, int telephone, int movil) {
@@ -275,7 +294,7 @@ public class ServidorAgenda implements Interfaz, Remote {
 	}
 
 	@Override
-	public boolean borrarContacto(String name, String surname, int movil) {
+	public boolean borrarContacto(int movil) {
 		// TODO: Still not implemented
 		boolean state = false;
 		try {
@@ -307,10 +326,8 @@ public class ServidorAgenda implements Interfaz, Remote {
 		try {
 			stmt = conexione.prepareStatement(query);
 			stmt.executeUpdate();
-			System.out.println("Delete ALL correcto!");
 			state = true;
 		} catch (SQLException e) {
-			System.err.println("Fallo en ejecutar: delete all");
 			e.printStackTrace();
 			state = false;
 		}
@@ -331,6 +348,7 @@ public class ServidorAgenda implements Interfaz, Remote {
 		ServidorAgenda serverObject = new ServidorAgenda();
 		try {
 			System.out.println("Inscribiendo el objeto servidor en el registro");
+			System.out.println("");
 			System.out.println("Se le da un nombre único: Agenda");
 			reg.rebind("Agenda", (Interfaz) UnicastRemoteObject.exportObject(serverObject, 0));
 		} catch (Exception e) {

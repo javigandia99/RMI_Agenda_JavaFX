@@ -3,6 +3,8 @@ package cliente;
 import java.io.IOException;
 import java.sql.Connection;
 import java.sql.ResultSet;
+import java.util.Optional;
+
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
@@ -13,6 +15,7 @@ import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.Alert.AlertType;
@@ -46,15 +49,10 @@ public class Controller {
 		data = FXCollections.observableArrayList();
 	}
 
-	public void goAgenda(ActionEvent event) {
-		cambiarVentana(event, (Stage) ((Node) event.getSource()).getScene().getWindow(),
-				"Agenda.fxml", "Agenda de contactos");
-	}
-
-	// Permite volver a la pantalla de inicio y cerrar la sesión
+	// Permite volver a la pantalla de inicio y cerrar la sesion
 	public void cerrarSesion(ActionEvent event) {
 		model.logout();
-		mostrarVentana(event, (Node) event.getSource(), "Login.fxml", "Log in", true, true);
+		mostrarVentana(event, (Node) event.getSource(), "Login.fxml", "Inicar sesion", true, true);
 		Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
 		stage.close();
 	}
@@ -65,7 +63,7 @@ public class Controller {
 	}
 
 	/**
-	 * Método que permite cambiar una nueva vista, abriendo un nuevo stage
+	 * Metodo que permite cambiar una nueva vista, abriendo un nuevo stage
 	 * 
 	 * @param event     ActionEvent que JavaFX pasa al método desde el que se llama
 	 *                  a mostrarVentana()
@@ -129,15 +127,6 @@ public class Controller {
 		}
 	}
 
-	/**
-	 * Método que permite cambiar a una nueva vista sin cambiar de stage
-	 * 
-	 * @param event ActionEvent que JavaFX pasa al método desde el que se llama a
-	 *              cambiarVentana()
-	 * @param stage Stage obtenido a partir del evento que pasa JavaFX
-	 * @param fxml  Archivo FXML que corresponde con la vista que quiere abrirse
-	 * @param title Título que se le quiere dar a la nueva vista
-	 */
 	public void cambiarVentana(ActionEvent event, Stage stage, String fxml, String title) {
 		Parent root;
 		try {
@@ -152,28 +141,20 @@ public class Controller {
 		}
 	}
 
-	/**
-	 * Permite mostrar un diálogo que espera hasta que lo cierra el usuario
-	 * 
-	 * @param title   Define el título del diálogo
-	 * @param header  Establece el texto de la cabecera del diálogo, puede estar
-	 *                vacío si se trata de un mensage más simple
-	 * @param content Define el contenido del diálogo
-	 */
-	public void dialog(String title, String header, String content) {
-		Alert alert = new Alert(AlertType.WARNING);
+	public Optional<ButtonType> dialog(AlertType type, String title, String header, String content) {
+		Alert alert = new Alert(type);
 		Stage stage = (Stage) alert.getDialogPane().getScene().getWindow();
 		stage.getIcons().add(new Image("file:Resources/images/logo.png"));
 		alert.setTitle(title);
 		alert.setHeaderText(header);
 		alert.setContentText(content);
-		alert.showAndWait();
-
+		Optional<ButtonType> option = alert.showAndWait();
+		return option;
 	}
 
 	/**
-	 * Permite llenar una tabla con consultas que no requieran de una comprobación,
-	 * como obtener todos los datos de una tabla, o hacer una búsqueda
+	 * Permite llenar una tabla con consultas que no requieran de una comprobacion,
+	 * como obtener todos los datos de una tabla, o hacer una busqueda
 	 * 
 	 * @param sql       La consulta con la que se llenará la tabla
 	 * @param tableView La tabla que va a ser completada con los datos de la
@@ -181,7 +162,7 @@ public class Controller {
 	 * @param data      El ObservableList que utiliza la tabla para obtener los
 	 *                  datos
 	 */
-	public void consultar(String sql, TableView tableView, ObservableList<ObservableList> data) {
+	public void search(String sql, TableView tableView, ObservableList<ObservableList> data) {
 		clearTable(tableView);
 
 		try {
@@ -191,6 +172,7 @@ public class Controller {
 			for (int i = 0; i < rs.getMetaData().getColumnCount(); i++) {
 				final int j = i;
 				TableColumn col = new TableColumn(rs.getMetaData().getColumnName(i + 1));
+
 				col.setCellValueFactory(
 						new Callback<CellDataFeatures<ObservableList, String>, ObservableValue<String>>() {
 							public ObservableValue<String> call(CellDataFeatures<ObservableList, String> param) {

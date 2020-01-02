@@ -1,13 +1,7 @@
 package cliente;
 
-import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.Map;
-import java.util.Map.Entry;
-import servidor.Contactos;
 import servidor.Interfaz;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
@@ -43,23 +37,6 @@ public class ClienteAgenda extends Application {
 		}
 	}
 	
-	
-	public static void mostrarContactos(HashMap<Integer, Contactos> lista) {
-		//TODO: Still not implemented
-		String state = null;
-		Iterator<Entry<Integer, Contactos>> it = lista.entrySet().iterator();
-		System.out.println("\nDatos:");
-		System.out.println("____________________________________________\n");
-		while (it.hasNext()) {
-			@SuppressWarnings("rawtypes")
-			Map.Entry pair = (Map.Entry) it.next();
-			it.remove();
-			System.out.println(""+pair.getKey() + " = " + pair.getValue().toString()+"");
-			 // avoids a ConcurrentModificationException
-		}
-		
-	}
-	
 	public static void main(String[] args) {
 		Interfaz agenda = null;
 		try {
@@ -69,18 +46,12 @@ public class ClienteAgenda extends Application {
 			agenda = (Interfaz) registry.lookup("Agenda");
 		} catch (Exception e) {
 			System.out.println("---------------------------------------");
-			System.out.println("Nose ha podido conectar con el servidor");
+			System.out.println("No se ha podido conectar con el servidor");
 		}
 		if (agenda != null) {
 			System.out.println("ABRIENDO AGENDA DE CONTACTOS");
+			//lanzamos aplicacion visual
 			launch(args);
-			
-			System.out.println("Realizando operaciones con el objeto remoto");	
-				try {
-				mostrarContactos(agenda.leerContactos());
-				} catch (RemoteException e) {
-					e.printStackTrace();
-				}
 
 		}
 	}
