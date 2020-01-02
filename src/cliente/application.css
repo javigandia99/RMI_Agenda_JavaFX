@@ -1,0 +1,197 @@
+/* JavaFX CSS - Leave this comment until you have at least create one rule which uses -fx-Property */
+@import url('https://fonts.googleapis.com/css?family=Roboto&display=swap');
+@import url('https://fonts.googleapis.com/css?family=Alfa+Slab+One&display=swap');
+
+
+*{
+}
+
+#title{
+	-fx-text-fill: white;
+	-fx-font-size: 32.0pt;
+	-fx-font-weight: bold;
+}
+
+.button {
+	-fx-background-color: 
+        #c3c4c4,
+        linear-gradient(#d6d6d6 50.0%, white 100.0%),
+        radial-gradient(center 50.0% -40.0%, radius 200.0%, #e6e6e6 45.0%, rgba(230.0,230.0,230.0,0.0) 50.0%);
+    -fx-background-radius: 20.0;
+    -fx-background-insets: 0.0,1.0,1.0;
+    -fx-text-fill: black;
+    -fx-effect: dropshadow( gaussian, rgba(0.0, 0.0, 0.0, 0.1), 10.0, 0.5, 0.0, 0.0 );
+}
+
+.button:hover {
+	-fx-background-color: 
+        #c3c4c4,
+        linear-gradient(rgb(195.0, 184.0, 184.0) 50.0%, #d6d6d6 100.0%),
+        radial-gradient(center 50.0% -40.0%, radius 200.0%, #e6e6e6 45.0%, rgba(230.0,230.0,230.0,0.0) 50.0%);
+    -fx-background-radius: 20.0;
+    -fx-background-insets: 0.0,1.0,1.0;
+    -fx-text-fill: black;
+}
+
+.buttonVerde {
+	-fx-background-color: 
+        rgb(35.0, 184.0, 34.0),
+        linear-gradient(rgb(45.0, 214.0, 44.0) 50.0%,rgb(205.0, 254.0, 204.0) 100.0%),
+        radial-gradient(center 50.0% -40.0%, radius 200.0%, rgb(50.0, 200.0,50.0) 45.0%, rgba(20.0,120.0,20.0,0.55) 50.0%);
+    -fx-background-radius: 20.0;
+    -fx-background-insets: 0.0,1.0,1.0;
+    -fx-text-fill: black;
+    -fx-effect: dropshadow( gaussian, rgba(0.0, 0.0, 0.0, 0.15), 10.0, 0.5, 0.0, 0.0 );
+}
+
+.buttonVerde:hover {
+	-fx-background-color: 
+        #c3c4c4,
+        linear-gradient(rgb(25.0, 194.0, 24.0) 50.0%, rgb(205.0, 254.0, 204.0), rgb(45.0, 184.0, 44.0) 100.0%),
+        radial-gradient(center 50.0% -40.0%, radius 200.0%, rgb(25.0, 174.0, 24.0) 45.0%, rgba(20.0,120.0,20.0,0.65) 50.0%);
+    -fx-background-radius: 20.0;
+    -fx-background-insets: 0.0,1.0,1.0;
+    -fx-text-fill: black;
+}
+
+.buttonRojo {
+	-fx-background-color: 
+        rgb(244.0, 45.0, 44.0),
+        linear-gradient(rgb(254.0, 35.0, 34.0) 50.0%, rgb(254.0, 175.0, 174.0) 100.0%),
+        radial-gradient(center 50.0% -40.0%, radius 200.0%, rgb(254.0, 65.0, 64.0) 45.0%, rgba(160.0,20.0,20.0,0.4) 50.0%);
+    -fx-background-radius: 20.0;
+   	-fx-background-insets: 0.0,1.0,1.0;
+   	-fx-text-fill: black;
+    -fx-effect: dropshadow( gaussian, rgba(0.0, 0.0, 0.0, 0.1), 10.0, 0.5, 0.0, 0.0 );
+}
+
+.buttonRojo:hover {
+	-fx-background-color: 
+        rgb(244.0, 45.0, 44.0),
+        linear-gradient(rgb(254.0, 35.0, 34.0) 50.0%, rgb(254.0, 175.0, 174.0) 100.0%),
+        radial-gradient(center 50.0% -40.0%, radius 200.0%, rgb(254.0, 65.0, 64.0) 45.0%, rgba(160.0,20.0,20.0,0.7) 50.0%);
+  	-fx-background-radius: 20.0;
+    -fx-background-insets: 0.0,1.0,1.0;
+    -fx-text-fill: black;
+}
+
+.paneUp{
+	-fx-background-color: rgb(50.0,50.0,50.0) ;
+	-fx-text-fill: white;
+	-fx-effect: dropshadow( gaussian, rgba(0.0, 0.0, 0.0, 0.3), 30.0, 0.5, 0.0, 0.0 );
+	
+}
+
+.paneLat{
+	-fx-background-color: rgb(60.0,60.0,60.0) ;
+	-fx-text-fill: white;
+	-fx-effect: dropshadow( gaussian, rgba(0.0, 0.0, 0.0, 0.3), 20.0, 0.4, 0.0, 0.0 );	
+}
+
+.text-field {
+    -fx-background-color: rgb(235.0,235.0,235.0) ;
+    -fx-text-fill: black;
+    -fx-background-insets: 0.0, 0.0 0.0 1.0 0.0 ;
+    -fx-background-radius: 20.0;
+    -fx-effect: dropshadow( gaussian, rgba(0.0, 0.0, 0.0, 0.25), 10.0, 0.5, 0.0, 0.0 );
+}
+
+.text-field:hover {
+    -fx-background-color: rgb(245.0,245.0,245.0) ;
+}
+
+.text-field:focused {
+    -fx-background-color: rgb(255.0,255.0,255.0) ;
+}
+
+#anchor{
+	-fx-background-image: url("../../Resources/1.jpg");
+	-fx-background-size: cover, auto;
+	-fx-effect: dropshadow( gaussian, rgba(0.0, 0.0, 0.0, 0.2), 10.0, 0.5, 0.0, 0.0 );
+	
+}
+
+#subListado{
+	-fx-background-color: rgb(30.0, 95.0, 95.0);
+	-fx-effect: dropshadow( gaussian, rgba(0.0, 0.0, 0.0, 0.2), 10.0, 0.5, 0.0, 0.0 );
+			
+}
+
+#subAdmin{
+	-fx-background-color:rgb(20.0, 80.0, 100.0);
+	-fx-effect: dropshadow( gaussian, rgba(0.0, 0.0, 0.0, 0.2), 10.0, 0.5, 0.0, 0.0 );
+				
+}
+
+.anchorSub{
+	-fx-background-color: linear-gradient(rgb(20.0, 70.0, 90.0) 50.0%, rgb(40.0, 50.0, 70.0) 100.0%);
+	-fx-effect: dropshadow( gaussian, rgba(0.0, 0.0, 0.0, 0.2), 15.0, 0.5, 0.0, 0.0 );
+	
+}
+
+.anchorSub1{
+	-fx-background-color: linear-gradient(rgb(20.0, 85.0, 85.0) 50.0%, rgb(30.0, 60.0, 60.0) 100.0%);
+	-fx-effect: dropshadow( gaussian, rgba(0.0, 0.0, 0.0, 0.2), 15.0, 0.5, 0.0, 0.0 );
+	
+}
+
+.anchorLogin{
+	-fx-background-radius: 20.0 20.0 20.0 20.0;
+	-fx-background-color: rgb(230.0,230.0,230.0);
+	-fx-effect: dropshadow( gaussian, rgba(0.0, 0.0, 0.0, 0.1), 10.0, 0.5, 0.0, 0.0 );
+	
+}
+
+.anchor2{
+	-fx-background-color: white;
+	-fx-border-radius: 20.0 20.0 20.0 20.0;
+	-fx-background-radius: 20.0 20.0 20.0 20.0;
+	-fx-effect: dropshadow( gaussian, rgba(0.0, 0.0, 0.0, 0.2), 10.0, 0.5, 0.0, 0.0 );
+}
+
+.separator *.line {
+    -fx-border-style: solid;
+    -fx-border-width: 0.0 0.0 1.0 0.0; 
+    -fx-border-color: white;
+}
+
+.label{
+	-fx-text-fill: black;
+}
+
+#table{
+	-fx-background-color: #d6d6d6;
+	-fx-text-fill: black;
+	-fx-effect: dropshadow( gaussian, rgba(0.0, 0.0, 0.0, 0.1), 10.0, 0.5, 0.0, 0.0 );
+	
+}
+
+.table-view .column-header-background .label{
+    -fx-text-fill: black;
+}
+
+.table-view .column-header {
+    -fx-background-color: linear-gradient(rgba(250.0, 250.0, 250.0, 0.1) 0.0%, rgba(250.0, 250.0, 250.0, 0.1) 75.0%);
+}
+
+.table-view .table-cell{
+    -fx-text-fill: black;
+    -fx-text-alignment: center; 
+}
+
+.table-row-cell{
+    -fx-background-color:  rgb(250.0, 250.0, 250.0);
+    -fx-text-alignment: center; 
+}
+
+.table-row-cell:odd{
+    -fx-background-color: rgb(240.0, 240.0, 240.0);
+}
+
+.table-row-cell:selected {
+    -fx-background-color: rgb(152.0, 205.0, 234.0);
+}
+
+.table-row-cell:hover {
+    -fx-background-color: rgb(209.0, 238.0, 255.0);
+}

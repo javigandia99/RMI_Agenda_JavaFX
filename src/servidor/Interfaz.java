@@ -15,12 +15,13 @@ public interface Interfaz extends Remote {
 	// Lee de todos los contactos almacenados en la agenda.
 	public HashMap<Integer, Contactos> leerContactos() throws RemoteException;
 
-	// para luego mostrarlos.
-	public String mostrarContactos(HashMap<Integer, Contactos> lista) throws RemoteException;
+	// El metodo de mostrar contactos, lo pase al cliente a la vista
+	//public void mostrarContactos(HashMap<Integer, Contactos> lista) throws RemoteException;
 
+	// El metodo de buscarContacto, lo pase al cliente a la vista
 	// Buscar: Permite localizar un contacto por nombre. Si existen varios con dicho
 	// nombre, se mostrarán todos.
-	public void buscarContacto(HashMap<Integer, Contactos> lista, String name) throws RemoteException;
+	//public void buscarContacto(HashMap<Integer, Contactos> lista, String name) throws RemoteException;
 
 	// insert
 	public String insertarContacto(String name, String surname, int telephone, int movil) throws RemoteException;

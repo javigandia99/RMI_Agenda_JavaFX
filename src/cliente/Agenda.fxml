@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.text.Font?>
+
+<BorderPane prefHeight="720.0" prefWidth="1280.0" stylesheets="@application.css" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="cliente.ControllerVAgenda">
+	<top>
+		<Pane styleClass="paneUp" stylesheets="@../application/application.css">
+			<children>
+				<Label alignment="CENTER" contentDisplay="CENTER" layoutX="111.0" prefHeight="70.0" prefWidth="1180.0" style="-fx-text-fill: white;" stylesheets="@../application/application.css" text="Agenda de Contactos" textAlignment="CENTER" textFill="WHITE">
+					<font>
+						<Font size="30.0" />
+					</font>
+				</Label>
+				<ImageView fitHeight="50.0" fitWidth="50.0" layoutX="14.0" layoutY="10.0" pickOnBounds="true" preserveRatio="true">
+					<image>
+						<Image url="@../../Resources/logo.png" />
+					</image>
+				</ImageView>
+            <AnchorPane id="subListado" layoutX="540.0" layoutY="56.0" prefHeight="5.0" prefWidth="315.0" stylesheets="@../application/application.css" />
+			</children>
+		</Pane>
+	</top>
+	<center>
+		<AnchorPane prefHeight="720.0" prefWidth="1280.0" BorderPane.alignment="CENTER">
+			<children>
+				<TextField fx:id="txtBuscarPaciente" layoutX="37.0" layoutY="64.0" prefHeight="26.0" prefWidth="380.0" promptText="Nombre del contacto" AnchorPane.leftAnchor="37.0" AnchorPane.topAnchor="64.0" />
+				<Button fx:id="btnBuscador" alignment="CENTER" contentDisplay="CENTER" layoutX="432.0" layoutY="64.0" mnemonicParsing="false" onAction="#BuscarPaciente" prefHeight="31.0" prefWidth="115.0" text="Buscar" textFill="WHITE" AnchorPane.topAnchor="64.0" />
+				<Button fx:id="btnRegistrarPaciente" alignment="CENTER" layoutX="953.0" layoutY="130.0" mnemonicParsing="false" onAction="#clickNewPaciente" prefHeight="40.0" prefWidth="171.0" text="Nuevo contacto" textFill="WHITE" AnchorPane.rightAnchor="31.0" AnchorPane.topAnchor="131.0" />
+				<TableView fx:id="tableView" layoutX="37.0" layoutY="120.0" prefHeight="456.0" prefWidth="886.0" AnchorPane.bottomAnchor="74.0" AnchorPane.leftAnchor="37.0" AnchorPane.rightAnchor="232.0" AnchorPane.topAnchor="120.0">
+               <columnResizePolicy>
+                  <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
+               </columnResizePolicy></TableView>
+            <Button fx:id="btnModificarPaciente" alignment="CENTER" layoutX="1078.0" layoutY="197.0" mnemonicParsing="false" onAction="#clickModificarPaciente" prefHeight="40.0" prefWidth="171.0" text="Modificar" textFill="WHITE" />
+            <Button fx:id="btnBorrarPaciente" alignment="CENTER" layoutX="1078.0" layoutY="263.0" mnemonicParsing="false" onAction="#borrarPaciente" prefHeight="40.0" prefWidth="171.0" text="Borrar" textFill="WHITE" />
+            <Button fx:id="btnRefrescar" layoutX="971.0" layoutY="590.0" mnemonicParsing="false" onAction="#clickRefrescar" text="Refrescar">
+               <font>
+                  <Font size="14.0" />
+               </font></Button>
+			</children>
+		</AnchorPane>
+	</center>
+</BorderPane>

@@ -1,6 +1,8 @@
 package servidor;
 
-public class Contactos {
+import java.io.Serializable;
+
+public class Contactos implements Serializable {
 	int id;
 	String name;
 	String surname;
@@ -51,7 +53,7 @@ public class Contactos {
 	public String toString() {
 		return "Name: " + name + "\n" 
 				+ "    Surname: " + surname + "\n" 
-				+ "    Description: " + telephone+ "\n"
+				+ "    Telephone: " + telephone+ "\n"
 				+ "Movil: " + movil + "\n" ;
 	}
 }

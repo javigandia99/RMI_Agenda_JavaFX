@@ -22,6 +22,7 @@ import java.util.Map;
 import java.util.Properties;
 import java.util.Map.Entry;
 import java.util.stream.Collectors;
+import javafx.scene.control.TableView;
 
 public class ServidorAgenda implements Interfaz, Remote {
 	private Connection conexione;
@@ -29,7 +30,10 @@ public class ServidorAgenda implements Interfaz, Remote {
 	private Properties properties;
 	private InputStream input;
 	private OutputStream output;
+	private boolean login;
+	private String correctUsername;
 	protected HashMap<Integer, Contactos> listadobd;
+	private TableView tablaContactos;
 	private String name;
 	private String surname;
 	private int telephone;
@@ -39,6 +43,9 @@ public class ServidorAgenda implements Interfaz, Remote {
 		config = new File("src/configuracion.ini");
 		properties = new Properties();
 		output = null;
+		login = false;
+		correctUsername = "";
+		tablaContactos = new TableView();
 		getConnection();
 	}
 
@@ -91,20 +98,77 @@ public class ServidorAgenda implements Interfaz, Remote {
 
 	@Override
 	public boolean registrarCliente(String username, String password, String name, String surname) {
-		// TODO Auto-generated method stub
+		String query = "INSERT INTO users (username, password, name, surname) VALUES (?, ?, ?, ?)";
+		try {
+			PreparedStatement stmt = conexione.prepareStatement(query);
+
+			stmt.setString(1, username);
+			stmt.setString(2, password);
+			stmt.setString(3, name);
+			stmt.setString(4, surname);
+			stmt.executeUpdate();
+			stmt.close();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		return false;
+	}
+
+	public void setTablaContactos(TableView<?> tableView) {
+		this.tablaContactos = tableView;
+		System.out.println("-> ini: " + tableView);
+		System.out.println("contactos . " + tablaContactos);
+	}
+
+	public void refreshContactos() {
+		tablaContactos.setVisible(false);
 	}
 
 	@Override
 	public String iniciarSesion(String username, String password) {
-		// TODO Auto-generated method stub
-		return null;
+		String state = null;
+		String correctUsername = " ";
+		String correctPassword = " ";
+
+		try {
+			String query = "SELECT username, password FROM users WHERE username = ?  AND password = ?";
+			PreparedStatement stmt = conexione.prepareStatement(query);
+			stmt.setString(1, username);
+			stmt.setString(2, password);
+			ResultSet rset = stmt.executeQuery();
+			rset.next();
+			correctUsername = rset.getString(1);
+			correctPassword = rset.getString(2);
+			rset.close();
+			stmt.close();
+		} catch (SQLException s) {
+			login = false;
+		}
+
+		login = correctUsername.equals(username) && correctPassword.equals(password);
+		if (login) {
+			this.correctUsername = correctUsername;
+			state = correctUsername.toString() + " Iniciado sesion";
+		} else {
+			state = "Username o password incorrecto";
+		}
+		return state;
+	}
+
+	public boolean isLogin() {
+		return login;
+	}
+
+	public void logout() {
+		conexione = null;
+		login = false;
+		correctUsername = "";
 	}
 
 	@Override
 	public HashMap<Integer, Contactos> leerContactos() throws RemoteException {
 		listadobd = new HashMap<Integer, Contactos>();
-
 		Contactos contact;
 		int count = 0;
 		try {
@@ -113,10 +177,10 @@ public class ServidorAgenda implements Interfaz, Remote {
 			ResultSet rs = stmt.executeQuery();
 			while (rs.next()) {
 				count++;
-				name = rs.getString(1);
-				surname = rs.getString(2);
-				telephone = rs.getInt(3);
-				movil = Integer.parseInt(rs.getString(4));
+				name = rs.getString(2);
+				surname = rs.getString(3);
+				telephone = rs.getInt(4);
+				movil = rs.getInt(5);
 				contact = new Contactos(count, name, surname, telephone, movil);
 				listadobd.put(count, contact);
 			}
@@ -129,31 +193,17 @@ public class ServidorAgenda implements Interfaz, Remote {
 
 	}
 
-	@Override
-	public String mostrarContactos(HashMap<Integer, Contactos> lista) {
-		String state = null;
-		Iterator<Entry<Integer, Contactos>> it = lista.entrySet().iterator();
-		System.out.println("\nDatos:");
-		System.out.println("____________________________________________\n");
-		while (it.hasNext()) {
-			@SuppressWarnings("rawtypes")
-			Map.Entry pair = (Map.Entry) it.next();
-			state = ""+pair.getKey() + " = " + pair.getValue().toString()+"";
-			it.remove(); // avoids a ConcurrentModificationException
-		}
-		return state;
-	}
-
-	@Override
-	public void buscarContacto(HashMap<Integer, Contactos> lista, String name) {
+	/*
+	public String buscarContacto(HashMap<Integer, Contactos> lista, String name) {
 		Map<Integer, Contactos> filtermap = lista.entrySet().stream()
 				.filter(s -> s.getValue().getName().equalsIgnoreCase(name))
 				.collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
-		System.out.println(filtermap.toString());
-	}
+		return filtermap.toString();
+	}*/
 
 	@Override
 	public String insertarContacto(String name, String surname, int telephone, int movil) {
+		// TODO: Still not implemented
 		String result = null;
 		try {
 
@@ -174,9 +224,8 @@ public class ServidorAgenda implements Interfaz, Remote {
 						}
 					}
 				}
-				stmt = conexione
-						.prepareStatement("insert into contacs (db_username,db_password,db_description) value ('" + name
-								+ "','" + surname + "','" + telephone + "','" + movil + "')");
+				stmt = conexione.prepareStatement("insert into contacs (id,name,surname,telephone,movil) value ('"
+						+ name + "','" + surname + "','" + telephone + "','" + movil + "')");
 				stmt.executeUpdate();
 				result = "Contacto correctamente introducido";
 			} catch (RemoteException e) {
@@ -191,27 +240,24 @@ public class ServidorAgenda implements Interfaz, Remote {
 
 	@Override
 	public boolean modificarContacto(String name, String surname, int telephone, int movil) {
-		// TODO Auto-generated method stub
-		return false;
-	}
+		boolean state;
+		String query = "UPDATE contacts SET name = ?, surname = ?, telephone = ?, movil = ?  WHERE movil LIKE ?";
+		try {
+			PreparedStatement stmt = conexione.prepareStatement(query);
 
-	/*
-	 * @Override public boolean modificarContacto(String name, String surname, int
-	 * telephone, int movil) { boolean state = false; try { if
-	 * (notexistUser(up_username)) { System.out.println("USERNAME NO EXISTE"); state
-	 * = false; } System.out.println("El username NUNCA se va a poder Modificar");
-	 * 
-	 * String query2 = "UPDATE user set db_password =  '" + newPassword +
-	 * "', db_description =  '" + newDescription + "' WHERE db_username = '" +
-	 * myusername + "'";
-	 * 
-	 * PreparedStatement stmt = conexione.prepareStatement(query2);
-	 * stmt.executeUpdate(query2); System.out.println("Update correcto!"); state =
-	 * true;
-	 * 
-	 * } catch (SQLException e) { System.out.println(e.getMessage()); } return
-	 * state; }
-	 */
+			stmt.setString(1, name);
+			stmt.setString(2, surname);
+			stmt.setInt(3, telephone);
+			stmt.setInt(4, movil);
+			stmt.executeUpdate();
+			stmt.close();
+			state = true;
+		} catch (SQLException e) {
+			e.printStackTrace();
+			state = false;
+		}
+		return state;
+	}
 
 	public boolean notexistMovil(int movil) throws SQLException {
 		String query = "SELECT movil FROM contacts WHERE movil LIKE ?";
@@ -230,6 +276,7 @@ public class ServidorAgenda implements Interfaz, Remote {
 
 	@Override
 	public boolean borrarContacto(String name, String surname, int movil) {
+		// TODO: Still not implemented
 		boolean state = false;
 		try {
 			if (notexistMovil(movil)) {
@@ -253,6 +300,7 @@ public class ServidorAgenda implements Interfaz, Remote {
 
 	@Override
 	public boolean borrarTodo() {
+		// TODO: Still not implemented
 		boolean state = false;
 		String query = "DELETE FROM contacs";
 		PreparedStatement stmt;
