@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.Cursor?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.BorderPane?>
+
+<BorderPane prefHeight="400.0" prefWidth="458.0" stylesheets="@application.css" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="cliente.ControllerVUsuario">
+	<center>
+      		<AnchorPane prefHeight="400.0" prefWidth="450.0" BorderPane.alignment="CENTER">
+      			<children>
+      				<Button fx:id="btnGuardar" alignment="CENTER" layoutX="248.0" layoutY="334.0" mnemonicParsing="false" onAction="#guardar" prefHeight="40.0" prefWidth="126.0" styleClass="buttonVerde" text="Guardar contacto" textFill="WHITE" AnchorPane.bottomAnchor="30.0" AnchorPane.rightAnchor="80.0">
+               <cursor>
+                  <Cursor fx:constant="HAND" />
+               </cursor>
+            </Button>
+            <Button fx:id="btnCancelar" alignment="CENTER" layoutX="87.0" layoutY="334.0" mnemonicParsing="false" onAction="#cancelar" prefHeight="40.0" prefWidth="125.0" styleClass="buttonRojo" text="Cancelar" textFill="WHITE" AnchorPane.bottomAnchor="30.0" AnchorPane.leftAnchor="87.0">
+               <cursor>
+                  <Cursor fx:constant="HAND" />
+               </cursor>
+            </Button>
+            <Label layoutX="80.0" layoutY="247.0" text="Apellido:" AnchorPane.leftAnchor="80.0" AnchorPane.topAnchor="257.0" />
+            <Label layoutX="61.0" layoutY="89.0" text="Antigua &#10;Contraseña:" AnchorPane.leftAnchor="80.0" AnchorPane.topAnchor="74.0" />
+            <Label layoutX="80.0" layoutY="187.0" text="Nombre:" AnchorPane.leftAnchor="80.0" AnchorPane.topAnchor="197.0" />
+            <Label layoutX="80.0" layoutY="127.0" text="Nueva &#10;Contraseña:" AnchorPane.leftAnchor="80.0" AnchorPane.topAnchor="137.0" />
+            <TextField fx:id="txtSurname" layoutX="187.0" layoutY="240.0" prefHeight="31.0" prefWidth="202.0" AnchorPane.rightAnchor="80.0" AnchorPane.topAnchor="250.0" />
+            <TextField fx:id="txtName" layoutX="182.0" layoutY="186.0" prefHeight="31.0" prefWidth="202.0" AnchorPane.rightAnchor="80.0" AnchorPane.topAnchor="190.0" />
+            <TextField fx:id="txtNueva" layoutX="182.0" layoutY="121.0" prefHeight="31.0" prefWidth="202.0" AnchorPane.rightAnchor="80.0" AnchorPane.topAnchor="130.0" />
+            <TextField fx:id="txtAntigua" layoutX="170.0" layoutY="56.0" prefHeight="31.0" prefWidth="202.0" AnchorPane.rightAnchor="80.0" AnchorPane.topAnchor="70.0" />
+            <ImageView fitHeight="72.0" fitWidth="272.0" layoutX="116.0" layoutY="15.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../../Resources/modificarperfil.png" />
+               </image>
+            </ImageView>
+            <Button fx:id="btnBorrar" layoutX="14.0" layoutY="21.0" mnemonicParsing="false" onAction="#clickBorrar" prefHeight="35.0" prefWidth="35.0" style="-fx-background-color: pink; -fx-border-color: red; -fx-border-radius: 100;" text="🗑" AnchorPane.leftAnchor="14.0" AnchorPane.topAnchor="21.0" />
+      			</children>
+      		</AnchorPane>
+	</center>
+</BorderPane>

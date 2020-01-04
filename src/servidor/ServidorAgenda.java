@@ -48,6 +48,7 @@ public class ServidorAgenda implements Interfaz, Remote {
 		getConnection();
 	}
 
+	//Conexion base de datos sql desde configuacion.ini
 	public Connection getConnection() {
 		String url = getProperty("url");
 		String user = getProperty("user");
@@ -94,6 +95,7 @@ public class ServidorAgenda implements Interfaz, Remote {
 		}
 	}
 
+	//LOGIN-REGISTRO
 	@Override
 	public boolean registrarUsuario(String username, String password, String name, String surname) {
 		String query = "INSERT INTO users (username, password, name, surname) VALUES (?, ?, ?, ?)";
@@ -128,6 +130,27 @@ public class ServidorAgenda implements Interfaz, Remote {
 			return false;
 		}
 	}
+	
+	@Override
+	public boolean modificarUsuario(String password, String name, String surname) throws RemoteException {
+		boolean state;
+		
+		String query = "UPDATE users SET password = ?, name = ?, surname = ?  WHERE username LIKE '"+getuserLogged()+"'";
+		try {
+			PreparedStatement stmt = conexione.prepareStatement(query);
+
+			stmt.setString(1, surname);
+			stmt.setString(2, name);
+			stmt.setString(3, surname);
+			stmt.executeUpdate();
+			stmt.close();
+			state = true;
+		} catch (SQLException e) {
+			e.printStackTrace();
+			state = false;
+		}
+		return state;
+	}
 
 	@Override
 	public boolean borrarUsuario(String username) throws RemoteException {
@@ -143,14 +166,6 @@ public class ServidorAgenda implements Interfaz, Remote {
 			return false;
 		}
 
-	}
-
-	public void setTablaContactos(TableView<?> tableView) {
-		this.tablaContactos = tableView;
-	}
-
-	public void refreshContactos() {
-		tablaContactos.setVisible(false);
 	}
 
 	@Override
@@ -176,13 +191,17 @@ public class ServidorAgenda implements Interfaz, Remote {
 		login = correctUsername.equals(username) && correctPassword.equals(password);
 		if (login) {
 			this.correctUsername = correctUsername;
-			return correctUsername.toString() + " Iniciado sesion";
+			return correctUsername.toString();
 		} else {
 			return "Username o password incorrecto";
 		}
 
 	}
 
+	public String getuserLogged() {
+		return correctUsername.toString();
+	}
+	
 	public boolean isLogin() {
 		return login;
 	}
@@ -193,6 +212,8 @@ public class ServidorAgenda implements Interfaz, Remote {
 		correctUsername = "";
 	}
 
+	
+	//AGENDA-CONTACTOS
 	@Override
 	public HashMap<Integer, Contactos> leerContactos() throws RemoteException {
 		listadobd = new HashMap<Integer, Contactos>();
@@ -219,9 +240,13 @@ public class ServidorAgenda implements Interfaz, Remote {
 		return listadobd;
 
 	}
-
+	
+	public void setTablaContactos(TableView<?> tableView) {
+		this.tablaContactos = tableView;
+	}
+	
 	@Override
-	public String insertarContacto(String name, String surname, int telephone, int movil) {
+	public String insertarContacto(String name, String surname, int telephone, int movil, String ref_user) {
 		// TODO: Still not implemented
 		String result = null;
 		try {
@@ -243,10 +268,10 @@ public class ServidorAgenda implements Interfaz, Remote {
 						}
 					}
 				}
-				stmt = conexione.prepareStatement("insert into contacs (id,name,surname,telephone,movil) value ('"
-						+ name + "','" + surname + "','" + telephone + "','" + movil + "')");
+				stmt = conexione.prepareStatement("INSERT INTO contacts (name,surname,telephone,movil,ref_user) value ('" + name
+						+ "','" + surname + "','" + telephone + "','" + movil + "','" + getuserLogged() + "')");
 				stmt.executeUpdate();
-				result = "Contacto correctamente introducido";
+				result = "Contacto correctamente introducido con el numero: " + movil;
 			} catch (RemoteException e) {
 				e.printStackTrace();
 			}
@@ -258,9 +283,9 @@ public class ServidorAgenda implements Interfaz, Remote {
 	}
 
 	@Override
-	public boolean modificarContacto(String name, String surname, int telephone, int movil) {
+	public boolean modificarContacto(String name, String surname, int telephone, int movil, String ref_user) {
 		boolean state;
-		String query = "UPDATE contacts SET name = ?, surname = ?, telephone = ?, movil = ?  WHERE movil LIKE ?";
+		String query = "UPDATE contacts SET name = ?, surname = ?, telephone = ?, movil = ?  WHERE movil LIKE ? AND ref_user LIKE '"+getuserLogged()+"'";
 		try {
 			PreparedStatement stmt = conexione.prepareStatement(query);
 
@@ -300,13 +325,10 @@ public class ServidorAgenda implements Interfaz, Remote {
 		try {
 			if (notexistMovil(movil)) {
 				System.out.println("No existe el usuario escrito");
-				return false;
 			} else {
-				System.out.println("Borrando...");
 				String query = "DELETE FROM contacts WHERE movil LIKE ('" + movil + "')";
 				PreparedStatement stmt = conexione.prepareStatement(query);
 				stmt.executeUpdate();
-				System.out.println("Delete correcto!");
 				stmt.close();
 				state = true;
 			}
@@ -329,12 +351,12 @@ public class ServidorAgenda implements Interfaz, Remote {
 			state = true;
 		} catch (SQLException e) {
 			e.printStackTrace();
-			state = false;
 		}
 
 		return state;
 	}
 
+	//MAIN
 	public static void main(String[] args) {
 		Registry reg = null;
 		try {

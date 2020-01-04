@@ -40,7 +40,7 @@ public class ControllerVContacto extends Controller {
 	public void registrarContacto() throws SQLException {
 		if (server.notexistMovil(Integer.parseInt(txtMovil.getText()))) {
 			server.insertarContacto(txtName.getText(), txtSurname.getText(), Integer.parseInt(txtTelephone.getText()),
-					Integer.parseInt(txtMovil.getText()));
+					Integer.parseInt(txtMovil.getText()), server.getuserLogged());
 		} else {
 			dialog(AlertType.INFORMATION, "Informacion", "Error",
 					"El contacto con el movil: '" + txtMovil.getText() + "' ya existe");
@@ -49,30 +49,30 @@ public class ControllerVContacto extends Controller {
 
 	private void modificarContacto() {
 		server.modificarContacto(txtName.getText(), txtSurname.getText(), Integer.parseInt(txtTelephone.getText()),
-				Integer.parseInt(txtMovil.getText()));
+				Integer.parseInt(txtMovil.getText()), server.getuserLogged());
 	}
 
 	public void guardar(ActionEvent event) {
 		try {
 			if (selecionado != -1) {
 				modificarContacto();
-				dialog(AlertType.INFORMATION, "Informacion", txtName.getText(),
-						"Contacto con numero: " + txtMovil.getText() + "modificado con exito");
+				dialog(AlertType.INFORMATION, "Informacion", " MODIFICACION COMPLETADA", "Modificado contacto: "
+						+ txtName.getText() + " " + txtSurname.getText() + " con numero: " + txtMovil.getText());
 			} else if (selecionado == -1) {
 				registrarContacto();
-				dialog(AlertType.INFORMATION, "Informacion", txtName.getText(),
-						"Contacto con numero: " + txtMovil.getText() + "registrado con exito");
+				dialog(AlertType.INFORMATION, "Informacion", "REGISTRO COMPLETADO", "Nuevo contacto: "
+						+ txtName.getText() + " " + txtSurname.getText() + " con numero: " + txtMovil.getText());
 			}
 
 		} catch (Exception e) {
-			dialog(AlertType.INFORMATION, "Informaci'on", "Error", "Ha habido un error al guardar el contacto");
+			dialog(AlertType.INFORMATION, "Informacion", "Error", "Ha habido un error al guardar el contacto");
 		}
 		Stage stage = (Stage) btnGuardar.getScene().getWindow();
 		stage.close();
-		//server.refreshContactos();
+
 	}
 
-	public void cancelar(ActionEvent event) {
+	public void clickCancelar(ActionEvent event) {
 		cancelar(event);
 	}
 }

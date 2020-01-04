@@ -63,6 +63,7 @@ public class ControllerVRegistro extends Controller {
 
 	public void registrarUsuario() throws SQLException {
 		if (!server.existeUsuario(txtUsername.getText())) {
+
 			server.registrarUsuario(txtUsername.getText(), txtPassword.getText(), txtName.getText(),
 					txtSurname.getText());
 		} else {

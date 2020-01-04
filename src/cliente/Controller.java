@@ -22,44 +22,43 @@ import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.TableColumn.CellDataFeatures;
 import javafx.scene.image.Image;
 import javafx.stage.Stage;
+import javafx.stage.StageStyle;
 import javafx.util.Callback;
 import servidor.ServidorAgenda;
 
 public class Controller {
 	private FXMLLoader loader;
-	private ServidorAgenda model;
+	private ServidorAgenda server;
 	private ObservableList<ObservableList> data;
 	static protected int selecionado;
-	private Stage primaryStage;
-	private TableView tablaPacientes;
-	private ObservableList<ObservableList> dataPacientes;
 
-	public ServidorAgenda getModel() {
-		return model;
+	public ServidorAgenda getServer() {
+		return server;
 	}
 
 	public void setModel(ServidorAgenda model) {
-		this.model = model;
+		this.server = model;
 	}
 
 	public Controller() {
-		ServidorAgenda model = new ServidorAgenda();
-		this.model = model;
+		ServidorAgenda server = new ServidorAgenda();
+		this.server = server;
 		loader = new FXMLLoader();
 		data = FXCollections.observableArrayList();
 	}
 
 	// Permite volver a la pantalla de inicio y cerrar la sesion
 	public void cerrarSesion(ActionEvent event) {
-		model.logout();
+		server.logout();
 		mostrarVentana(event, (Node) event.getSource(), "Login.fxml", "Inicar sesion", true, true);
 		Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
 		stage.close();
 	}
 
-	public void clickCancelar(ActionEvent event) {
+	public void cancelar(ActionEvent event) {
 		Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
 		stage.close();
+
 	}
 
 	/**
@@ -100,33 +99,7 @@ public class Controller {
 		}
 	}
 
-	public void mostrarVentanaedicion(ActionEvent event, Node node, String fxml, String title, boolean escalable,
-			boolean hide, int selecionado) {
-		Parent root;
-		try {
-			root = FXMLLoader.load(getClass().getResource(fxml));
-			Stage stage = new Stage();
-			stage.setTitle(title);
-			stage.setScene(new Scene(root));
-			stage.getIcons().add(new Image("file:Resources/logo.png"));
-			if (escalable) {
-				stage.setResizable(true);
-
-			} else {
-				stage.setResizable(false);
-			}
-			if (hide) {
-				((Node) (event.getSource())).getScene().getWindow().hide();
-
-			} else {
-				((Node) (event.getSource())).getScene().getWindow();
-			}
-			stage.show();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-	}
-
+	// cambia de stage, manteniendo la ventana
 	public void cambiarVentana(ActionEvent event, Stage stage, String fxml, String title) {
 		Parent root;
 		try {
@@ -148,6 +121,7 @@ public class Controller {
 		alert.setTitle(title);
 		alert.setHeaderText(header);
 		alert.setContentText(content);
+		alert.initStyle(StageStyle.UTILITY);
 		Optional<ButtonType> option = alert.showAndWait();
 		return option;
 	}
@@ -156,7 +130,7 @@ public class Controller {
 	 * Permite llenar una tabla con consultas que no requieran de una comprobacion,
 	 * como obtener todos los datos de una tabla, o hacer una busqueda
 	 * 
-	 * @param sql       La consulta con la que se llenará la tabla
+	 * @param sql       La consulta con la que se llena la tabla
 	 * @param tableView La tabla que va a ser completada con los datos de la
 	 *                  consulta
 	 * @param data      El ObservableList que utiliza la tabla para obtener los
@@ -166,8 +140,7 @@ public class Controller {
 		clearTable(tableView);
 
 		try {
-			Connection connection = model.getConnection();
-			ResultSet rs = connection.createStatement().executeQuery(sql);
+			ResultSet rs = server.getConnection().createStatement().executeQuery(sql);
 
 			for (int i = 0; i < rs.getMetaData().getColumnCount(); i++) {
 				final int j = i;

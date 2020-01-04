@@ -6,13 +6,18 @@ import java.util.HashMap;
 
 public interface Interfaz extends Remote {
 
-	// Register usuario
-	public boolean registrarUsuario(String username, String password, String name, String surname) throws RemoteException;
+	// Register user
+	public boolean registrarUsuario(String username, String password, String name, String surname)
+			throws RemoteException;
 
-	// Delete usuario
+	// Modificar user
+	public boolean modificarUsuario(String password, String name, String surname)
+			throws RemoteException;
+
+	// Delete user
 	public boolean borrarUsuario(String username) throws RemoteException;
 
-	// Login
+	// Login user
 	public String iniciarSesion(String username, String password) throws RemoteException;
 
 	// Lee de todos los contactos almacenados en la agenda.
@@ -28,13 +33,13 @@ public interface Interfaz extends Remote {
 	// public void buscarContacto(HashMap<Integer, Contactos> lista, String name)
 	// throws RemoteException;
 
-	// insert
-	public String insertarContacto(String name, String surname, int telephone, int movil) throws RemoteException;
+	// insert contact
+	public String insertarContacto(String name, String surname, int telephone, int movil, String ref_user) throws RemoteException;
 
-	// update
-	public boolean modificarContacto(String name, String surname, int telephone, int movil) throws RemoteException;
+	// update contact
+	public boolean modificarContacto(String name, String surname, int telephone, int movil,String ref_user) throws RemoteException;
 
-	// Delete
+	// Delete contact
 	public boolean borrarContacto(int movil) throws RemoteException;
 
 	// Delete all

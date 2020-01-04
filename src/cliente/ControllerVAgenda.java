@@ -6,11 +6,10 @@ import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
-import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
-import javafx.scene.control.Cell;
+import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TablePosition;
 import javafx.scene.control.TableView;
@@ -38,8 +37,9 @@ public class ControllerVAgenda extends Controller {
 	@FXML
 	private TextField txtBuscarContacto;
 	@FXML
+	private Label lblUser;
+	@FXML
 	private TableView tableView;
-
 	private ObservableList<ObservableList> data;
 
 	@FXML
@@ -61,6 +61,9 @@ public class ControllerVAgenda extends Controller {
 		this.server = server;
 		data = FXCollections.observableArrayList();
 		tableView = new TableView();
+		System.out.println(server.getuserLogged());
+		lblUser.setText("Hoila");
+		System.out.println(server.getuserLogged());
 	}
 
 	public TableView getTableView() {
@@ -113,7 +116,12 @@ public class ControllerVAgenda extends Controller {
 		Optional<ButtonType> option = dialog(AlertType.CONFIRMATION, "Borrar contacto", "",
 				"¿Estas seguro de querer eliminar todos los contactos?, No habra vuelta atras");
 		if (option.get() == ButtonType.OK) {
-			server.borrarTodo();
+			if (server.borrarTodo()) {
+				dialog(AlertType.INFORMATION, "Todos los contactos eliminados", "", "");
+				System.out.println("Todos los contactos borrados");
+			} else {
+				dialog(AlertType.ERROR, "ERROR", "", "Ha ocurrido algo");
+			}
 		}
 		refresh(null);
 	}
@@ -122,16 +130,12 @@ public class ControllerVAgenda extends Controller {
 		search("SELECT * FROM contacts WHERE name LIKE '%" + txtBuscarContacto.getText() + "%'", tableView, data);
 	}
 
-	public void clickRefrescar(ActionEvent event) {
-		refresh(null);
-	}
-
 	public void refresh(ActionEvent event) {
 		search("SELECT * FROM contacts", tableView, data);
 	}
 
 	public void clickPerfil(ActionEvent event) {
-		cerrarSesion(event);
+		mostrarVentana(event, (Node) event.getSource(), "Usuario.fxml", "Usuario", false, false);
 	}
 
 	public void clickCerrarSesion(ActionEvent event) {

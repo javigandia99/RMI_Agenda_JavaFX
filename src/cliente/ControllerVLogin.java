@@ -34,7 +34,7 @@ public class ControllerVLogin extends Controller {
 		if (server.isLogin()) {
 			mostrarVentana(event, (Node) event.getSource(), "Agenda.fxml", "Agenda de Contactos", false, true);
 		} else {
-			dialog(AlertType.INFORMATION,"Informacion", "Error", "Usuario o contraseña incorrectos");
+			dialog(AlertType.INFORMATION, "Informacion", "Error", "Usuario o contraseña incorrectos");
 		}
 	}
 

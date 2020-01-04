@@ -27,10 +27,10 @@
             <Label layoutX="61.0" layoutY="89.0" text="Nombre:" AnchorPane.leftAnchor="80.0" AnchorPane.topAnchor="74.0" />
             <Label layoutX="80.0" layoutY="187.0" text="Telefono fijo:" AnchorPane.leftAnchor="80.0" AnchorPane.topAnchor="197.0" />
             <Label layoutX="80.0" layoutY="127.0" text="Apellidos:" AnchorPane.leftAnchor="80.0" AnchorPane.topAnchor="137.0" />
-            <TextField fx:id="txtUser" layoutX="187.0" layoutY="240.0" prefHeight="31.0" prefWidth="202.0" AnchorPane.rightAnchor="80.0" AnchorPane.topAnchor="250.0" />
-            <TextField fx:id="txtUser1" layoutX="182.0" layoutY="186.0" prefHeight="31.0" prefWidth="202.0" AnchorPane.rightAnchor="80.0" AnchorPane.topAnchor="190.0" />
-            <TextField fx:id="txtUser2" layoutX="182.0" layoutY="121.0" prefHeight="31.0" prefWidth="202.0" AnchorPane.rightAnchor="80.0" AnchorPane.topAnchor="130.0" />
-            <TextField fx:id="txtUser21" layoutX="170.0" layoutY="56.0" prefHeight="31.0" prefWidth="202.0" AnchorPane.rightAnchor="80.0" AnchorPane.topAnchor="70.0" />
+            <TextField fx:id="txtMovil" layoutX="187.0" layoutY="240.0" prefHeight="31.0" prefWidth="202.0" AnchorPane.rightAnchor="80.0" AnchorPane.topAnchor="250.0" />
+            <TextField fx:id="txtTelephone" layoutX="182.0" layoutY="186.0" prefHeight="31.0" prefWidth="202.0" AnchorPane.rightAnchor="80.0" AnchorPane.topAnchor="190.0" />
+            <TextField fx:id="txtSurname" layoutX="182.0" layoutY="121.0" prefHeight="31.0" prefWidth="202.0" AnchorPane.rightAnchor="80.0" AnchorPane.topAnchor="130.0" />
+            <TextField fx:id="txtName" layoutX="170.0" layoutY="56.0" prefHeight="31.0" prefWidth="202.0" AnchorPane.rightAnchor="80.0" AnchorPane.topAnchor="70.0" />
             <ImageView fitHeight="150.0" fitWidth="200.0" layoutX="129.0" layoutY="14.0" pickOnBounds="true" preserveRatio="true">
                <image>
                   <Image url="@../../Resources/contacto.png" />

@@ -10,11 +10,10 @@ import javafx.scene.Scene;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.image.Image;
 
-
 public class ClienteAgenda extends Application {
 	private Stage primaryStage;
 	private AnchorPane rootLayout;
-	
+
 	@Override
 	public void start(Stage primaryStage) {
 		try {
@@ -36,7 +35,7 @@ public class ClienteAgenda extends Application {
 			e.printStackTrace();
 		}
 	}
-	
+
 	public static void main(String[] args) {
 		Interfaz agenda = null;
 		try {
@@ -47,10 +46,11 @@ public class ClienteAgenda extends Application {
 		} catch (Exception e) {
 			System.out.println("---------------------------------------");
 			System.out.println("No se ha podido conectar con el servidor");
+			System.exit(-1);
 		}
 		if (agenda != null) {
 			System.out.println("ABRIENDO AGENDA DE CONTACTOS");
-			//lanzamos aplicacion visual
+			// lanzamos aplicacion visual
 			launch(args);
 
 		}
