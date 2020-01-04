@@ -29,6 +29,7 @@ import servidor.ServidorAgenda;
 public class Controller {
 	private FXMLLoader loader;
 	private ServidorAgenda server;
+
 	private ObservableList<ObservableList> data;
 	static protected int selecionado;
 
@@ -45,14 +46,14 @@ public class Controller {
 		this.server = server;
 		loader = new FXMLLoader();
 		data = FXCollections.observableArrayList();
+
 	}
 
 	// Permite volver a la pantalla de inicio y cerrar la sesion
 	public void cerrarSesion(ActionEvent event) {
 		server.logout();
-		mostrarVentana(event, (Node) event.getSource(), "Login.fxml", "Inicar sesion", true, true);
-		Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-		stage.close();
+		mostrarVentana(event, (Node) event.getSource(), "Login.fxml", "Inicar sesion", true, true, -1);
+		cancelar(event);
 	}
 
 	public void cancelar(ActionEvent event) {
@@ -72,8 +73,8 @@ public class Controller {
 	 * @param escalable Define si el nuevo stage puede cambiar de tamaño
 	 * @param hide      Si se define como true, oculta el stage que se le pasa
 	 */
-	public void mostrarVentana(ActionEvent event, Node node, String fxml, String title, boolean escalable,
-			boolean hide) {
+	public void mostrarVentana(ActionEvent event, Node node, String fxml, String title, boolean escalable, boolean hide,
+			int selecionado) {
 		Parent root;
 		try {
 			root = FXMLLoader.load(getClass().getResource(fxml));
@@ -124,49 +125,6 @@ public class Controller {
 		alert.initStyle(StageStyle.UTILITY);
 		Optional<ButtonType> option = alert.showAndWait();
 		return option;
-	}
-
-	/**
-	 * Permite llenar una tabla con consultas que no requieran de una comprobacion,
-	 * como obtener todos los datos de una tabla, o hacer una busqueda
-	 * 
-	 * @param sql       La consulta con la que se llena la tabla
-	 * @param tableView La tabla que va a ser completada con los datos de la
-	 *                  consulta
-	 * @param data      El ObservableList que utiliza la tabla para obtener los
-	 *                  datos
-	 */
-	public void search(String sql, TableView tableView, ObservableList<ObservableList> data) {
-		clearTable(tableView);
-
-		try {
-			ResultSet rs = server.getConnection().createStatement().executeQuery(sql);
-
-			for (int i = 0; i < rs.getMetaData().getColumnCount(); i++) {
-				final int j = i;
-				TableColumn col = new TableColumn(rs.getMetaData().getColumnName(i + 1));
-
-				col.setCellValueFactory(
-						new Callback<CellDataFeatures<ObservableList, String>, ObservableValue<String>>() {
-							public ObservableValue<String> call(CellDataFeatures<ObservableList, String> param) {
-								return new SimpleStringProperty(param.getValue().get(j).toString());
-							}
-						});
-
-				tableView.getColumns().addAll(col);
-
-				while (rs.next()) {
-					ObservableList<String> row = FXCollections.observableArrayList();
-					for (int z = 1; z <= rs.getMetaData().getColumnCount(); z++) {
-						row.add(rs.getString(z));
-					}
-					data.add(row);
-				}
-				tableView.setItems(data);
-			}
-		} catch (Exception e) {
-			System.out.println(e);
-		}
 	}
 
 	// Permite borra el contenido de una tabla concreta

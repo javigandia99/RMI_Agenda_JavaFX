@@ -74,10 +74,9 @@ public class ControllerVUsuario extends Controller {
 	}
 
 	public void clickBorrar(ActionEvent event) {
-		try {
-			server.borrarUsuario(server.getuserLogged());
-		} catch (RemoteException e) {
-			e.printStackTrace();
-		}
+		/*
+		 * try { server.borrarUsuario(getUserLogged()); } catch (RemoteException e) {
+		 * e.printStackTrace(); }
+		 */
 	}
 }

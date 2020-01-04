@@ -17,12 +17,17 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.HashMap;
-import java.util.Iterator;
-import java.util.Map;
 import java.util.Properties;
 import java.util.Map.Entry;
-import java.util.stream.Collectors;
+import cliente.ControllerVAgenda;
+import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.value.ObservableValue;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
+import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
+import javafx.scene.control.TableColumn.CellDataFeatures;
+import javafx.util.Callback;
 
 public class ServidorAgenda implements Interfaz, Remote {
 	private Connection conexione;
@@ -38,17 +43,17 @@ public class ServidorAgenda implements Interfaz, Remote {
 	private String surname;
 	private int telephone;
 	private int movil;
+	protected ControllerVAgenda agenda;
 
 	public ServidorAgenda() {
 		config = new File("src/configuracion.ini");
 		properties = new Properties();
 		output = null;
 		login = false;
-		correctUsername = "";
 		getConnection();
 	}
 
-	//Conexion base de datos sql desde configuacion.ini
+	// Conexion base de datos sql desde configuacion.ini
 	public Connection getConnection() {
 		String url = getProperty("url");
 		String user = getProperty("user");
@@ -95,7 +100,7 @@ public class ServidorAgenda implements Interfaz, Remote {
 		}
 	}
 
-	//LOGIN-REGISTRO
+	// LOGIN-REGISTRO
 	@Override
 	public boolean registrarUsuario(String username, String password, String name, String surname) {
 		String query = "INSERT INTO users (username, password, name, surname) VALUES (?, ?, ?, ?)";
@@ -109,7 +114,6 @@ public class ServidorAgenda implements Interfaz, Remote {
 			stmt.executeUpdate();
 			stmt.close();
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		return false;
@@ -130,12 +134,13 @@ public class ServidorAgenda implements Interfaz, Remote {
 			return false;
 		}
 	}
-	
+
 	@Override
 	public boolean modificarUsuario(String password, String name, String surname) throws RemoteException {
 		boolean state;
-		
-		String query = "UPDATE users SET password = ?, name = ?, surname = ?  WHERE username LIKE '"+getuserLogged()+"'";
+
+		String query = "UPDATE users SET password = ?, name = ?, surname = ?  WHERE username LIKE '"
+				+ correctUsername.toString() + "'";
 		try {
 			PreparedStatement stmt = conexione.prepareStatement(query);
 
@@ -170,7 +175,7 @@ public class ServidorAgenda implements Interfaz, Remote {
 
 	@Override
 	public String iniciarSesion(String username, String password) {
-		String correctUsername = " ";
+		correctUsername = " ";
 		String correctPassword = " ";
 
 		try {
@@ -190,7 +195,6 @@ public class ServidorAgenda implements Interfaz, Remote {
 
 		login = correctUsername.equals(username) && correctPassword.equals(password);
 		if (login) {
-			this.correctUsername = correctUsername;
 			return correctUsername.toString();
 		} else {
 			return "Username o password incorrecto";
@@ -198,10 +202,6 @@ public class ServidorAgenda implements Interfaz, Remote {
 
 	}
 
-	public String getuserLogged() {
-		return correctUsername.toString();
-	}
-	
 	public boolean isLogin() {
 		return login;
 	}
@@ -212,10 +212,64 @@ public class ServidorAgenda implements Interfaz, Remote {
 		correctUsername = "";
 	}
 
-	
-	//AGENDA-CONTACTOS
+	// AGENDA-CONTACTOS
+
+	/**
+	 * Permite llenar una tabla con consultas que no requieran de una comprobacion,
+	 * como obtener todos los datos de una tabla, o hacer una busqueda
+	 * 
+	 * @param sql       La consulta con la que se llena la tabla
+	 * @param tableView La tabla que va a ser completada con los datos de la
+	 *                  consulta
+	 * @param data      El ObservableList que utiliza la tabla para obtener los
+	 *                  datos
+	 */
+	@SuppressWarnings({ "rawtypes", "unchecked" })
+	public void leerContactos(String query, TableView tableView, ObservableList<ObservableList> data)
+			throws RemoteException {
+		// clear table
+		data.clear();
+		tableView.getColumns().clear();
+		tableView.getItems().clear();
+
+		try {
+			ResultSet rs = getConnection().createStatement().executeQuery(query);
+			// table column added dynamically
+			for (int i = 0; i < rs.getMetaData().getColumnCount(); i++) {
+				final int j = i;
+				TableColumn col = new TableColumn(rs.getMetaData().getColumnName(i + 1));
+
+				col.setCellValueFactory(
+						new Callback<CellDataFeatures<ObservableList, String>, ObservableValue<String>>() {
+							public ObservableValue<String> call(CellDataFeatures<ObservableList, String> param) {
+								return new SimpleStringProperty(param.getValue().get(j).toString());
+							}
+						});
+
+				tableView.getColumns().addAll(col);
+
+				// data added to ObservableList
+				while (rs.next()) {
+					ObservableList<String> row = FXCollections.observableArrayList();
+					for (int z = 1; z <= rs.getMetaData().getColumnCount(); z++) {
+						row.add(rs.getString(z));
+					}
+					data.add(row);
+				}
+				// added to tableview
+				tableView.setItems(data);
+			}
+		} catch (Exception e) {
+			System.out.println(e);
+		}
+	}
+
+	public void setTablaContactos(TableView<?> tableView) {
+		this.tablaContactos = tableView;
+	}
+
 	@Override
-	public HashMap<Integer, Contactos> leerContactos() throws RemoteException {
+	public HashMap<Integer, Contactos> leerHashContactos() throws RemoteException {
 		listadobd = new HashMap<Integer, Contactos>();
 		Contactos contact;
 		int count = 0;
@@ -240,21 +294,16 @@ public class ServidorAgenda implements Interfaz, Remote {
 		return listadobd;
 
 	}
-	
-	public void setTablaContactos(TableView<?> tableView) {
-		this.tablaContactos = tableView;
-	}
-	
+
 	@Override
 	public String insertarContacto(String name, String surname, int telephone, int movil, String ref_user) {
-		// TODO: Still not implemented
 		String result = null;
 		try {
 
 			HashMap<Integer, Contactos> listaadd;
 
 			try {
-				listaadd = leerContactos();
+				listaadd = leerHashContactos();
 
 				PreparedStatement stmt;
 				stmt = conexione.prepareStatement("SELECT * FROM contacts WHERE movil LIKE '" + movil + "'");
@@ -268,8 +317,9 @@ public class ServidorAgenda implements Interfaz, Remote {
 						}
 					}
 				}
-				stmt = conexione.prepareStatement("INSERT INTO contacts (name,surname,telephone,movil,ref_user) value ('" + name
-						+ "','" + surname + "','" + telephone + "','" + movil + "','" + getuserLogged() + "')");
+				stmt = conexione
+						.prepareStatement("INSERT INTO contacts (name,surname,telephone,movil,ref_user) value ('" + name
+								+ "','" + surname + "','" + telephone + "','" + movil + "','" + ref_user + "')");
 				stmt.executeUpdate();
 				result = "Contacto correctamente introducido con el numero: " + movil;
 			} catch (RemoteException e) {
@@ -285,7 +335,8 @@ public class ServidorAgenda implements Interfaz, Remote {
 	@Override
 	public boolean modificarContacto(String name, String surname, int telephone, int movil, String ref_user) {
 		boolean state;
-		String query = "UPDATE contacts SET name = ?, surname = ?, telephone = ?, movil = ?  WHERE movil LIKE ? AND ref_user LIKE '"+getuserLogged()+"'";
+		String query = "UPDATE contacts SET name = ?, surname = ?, telephone = ?, movil = ?  WHERE movil LIKE ? AND ref_user LIKE '"
+				+ ref_user + "'";
 		try {
 			PreparedStatement stmt = conexione.prepareStatement(query);
 
@@ -320,7 +371,6 @@ public class ServidorAgenda implements Interfaz, Remote {
 
 	@Override
 	public boolean borrarContacto(int movil) {
-		// TODO: Still not implemented
 		boolean state = false;
 		try {
 			if (notexistMovil(movil)) {
@@ -340,10 +390,8 @@ public class ServidorAgenda implements Interfaz, Remote {
 	}
 
 	@Override
-	public boolean borrarTodo() {
-		// TODO: Still not implemented
+	public boolean borrarTodo(String query) {
 		boolean state = false;
-		String query = "DELETE FROM contacs";
 		PreparedStatement stmt;
 		try {
 			stmt = conexione.prepareStatement(query);
@@ -356,7 +404,7 @@ public class ServidorAgenda implements Interfaz, Remote {
 		return state;
 	}
 
-	//MAIN
+	// MAIN
 	public static void main(String[] args) {
 		Registry reg = null;
 		try {

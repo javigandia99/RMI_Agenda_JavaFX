@@ -1,5 +1,6 @@
 package cliente;
 
+import java.rmi.RemoteException;
 import java.util.Optional;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -61,24 +62,18 @@ public class ControllerVAgenda extends Controller {
 		this.server = server;
 		data = FXCollections.observableArrayList();
 		tableView = new TableView();
-		System.out.println(server.getuserLogged());
-		lblUser.setText("Hoila");
-		System.out.println(server.getuserLogged());
-	}
-
-	public TableView getTableView() {
-		return tableView;
 	}
 
 	public void clickNuevoContacto(ActionEvent event) {
 		selecionado = -1;
-		mostrarVentana(event, (Node) event.getSource(), "Contacto.fxml", "Nuevo Contacto", false, false);
+		mostrarVentana(event, (Node) event.getSource(), "Contacto.fxml", "Nuevo Contacto", false, false, selecionado);
 	}
 
 	public void clickModificarContacto(ActionEvent event) {
 		selecionado = tableView.getSelectionModel().getSelectedIndex();
 		if (selecionado != -1) {
-			mostrarVentana(event, (Node) event.getSource(), "Contacto.fxml", "Modificar Contacto", false, false);
+			mostrarVentana(event, (Node) event.getSource(), "Contacto.fxml", "Modificar Contacto", false, false,
+					selecionado);
 			refresh(event);
 		} else {
 			dialog(AlertType.WARNING, "Alerta", "No hay ninguna fila seleccionada",
@@ -116,7 +111,9 @@ public class ControllerVAgenda extends Controller {
 		Optional<ButtonType> option = dialog(AlertType.CONFIRMATION, "Borrar contacto", "",
 				"¿Estas seguro de querer eliminar todos los contactos?, No habra vuelta atras");
 		if (option.get() == ButtonType.OK) {
-			if (server.borrarTodo()) {
+			if (server.borrarTodo("DELETE FROM contacts "
+					// + "WHERE ref_user LIKE'" + getUserLogged()
+					+ "'")) {
 				dialog(AlertType.INFORMATION, "Todos los contactos eliminados", "", "");
 				System.out.println("Todos los contactos borrados");
 			} else {
@@ -127,15 +124,29 @@ public class ControllerVAgenda extends Controller {
 	}
 
 	public void buscarContacto(ActionEvent event) {
-		search("SELECT * FROM contacts WHERE name LIKE '%" + txtBuscarContacto.getText() + "%'", tableView, data);
+		try {
+			server.leerContactos("SELECT * FROM contacts WHERE "
+					// + "ref_user LIKE '" + getUserLogged()+ "' AND"
+					+ " name LIKE '%" + txtBuscarContacto.getText() + "%'", tableView, data);
+		} catch (RemoteException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 
 	public void refresh(ActionEvent event) {
-		search("SELECT * FROM contacts", tableView, data);
+		try {
+			server.leerContactos("SELECT * FROM contacts "
+			// + "WHERE ref_user LIKE '" + getUserLogged() + "'"
+					, tableView, data);
+		} catch (RemoteException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 
 	public void clickPerfil(ActionEvent event) {
-		mostrarVentana(event, (Node) event.getSource(), "Usuario.fxml", "Usuario", false, false);
+		mostrarVentana(event, (Node) event.getSource(), "Usuario.fxml", "Usuario", false, false, 0);
 	}
 
 	public void clickCerrarSesion(ActionEvent event) {

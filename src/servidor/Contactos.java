@@ -7,7 +7,7 @@ public class Contactos implements Serializable {
 	String name;
 	String surname;
 	int telephone;
-	//movil == primary key
+	// movil == primary key
 	int movil;
 
 	public Contactos(int id, String name, String surname, int telephone, int movil) {
@@ -48,12 +48,5 @@ public class Contactos implements Serializable {
 
 	public void setMovil(int movil) {
 		this.movil = movil;
-	}
-
-	public String toString() {
-		return "Name: " + name + "\n" 
-				+ "    Surname: " + surname + "\n" 
-				+ "    Telephone: " + telephone+ "\n"
-				+ "Movil: " + movil + "\n" ;
 	}
 }

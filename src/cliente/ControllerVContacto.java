@@ -40,7 +40,7 @@ public class ControllerVContacto extends Controller {
 	public void registrarContacto() throws SQLException {
 		if (server.notexistMovil(Integer.parseInt(txtMovil.getText()))) {
 			server.insertarContacto(txtName.getText(), txtSurname.getText(), Integer.parseInt(txtTelephone.getText()),
-					Integer.parseInt(txtMovil.getText()), server.getuserLogged());
+					Integer.parseInt(txtMovil.getText()), "w");
 		} else {
 			dialog(AlertType.INFORMATION, "Informacion", "Error",
 					"El contacto con el movil: '" + txtMovil.getText() + "' ya existe");
@@ -49,7 +49,7 @@ public class ControllerVContacto extends Controller {
 
 	private void modificarContacto() {
 		server.modificarContacto(txtName.getText(), txtSurname.getText(), Integer.parseInt(txtTelephone.getText()),
-				Integer.parseInt(txtMovil.getText()), server.getuserLogged());
+				Integer.parseInt(txtMovil.getText()), "w");
 	}
 
 	public void guardar(ActionEvent event) {
@@ -67,6 +67,7 @@ public class ControllerVContacto extends Controller {
 		} catch (Exception e) {
 			dialog(AlertType.INFORMATION, "Informacion", "Error", "Ha habido un error al guardar el contacto");
 		}
+
 		Stage stage = (Stage) btnGuardar.getScene().getWindow();
 		stage.close();
 

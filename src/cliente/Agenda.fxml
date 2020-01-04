@@ -26,7 +26,7 @@
 						<Image url="@../../Resources/logo.png" />
 					</image>
 				</ImageView>
-            <AnchorPane id="subListado" layoutX="198.0" layoutY="54.0" prefHeight="5.0" prefWidth="315.0" stylesheets="@../application/application.css" />
+            <AnchorPane id="subListado" layoutX="198.0" layoutY="55.0" prefHeight="4.0" prefWidth="315.0" stylesheets="@../application/application.css" />
             <ImageView fitHeight="27.0" fitWidth="27.0" focusTraversable="true" layoutX="679.0" layoutY="22.0" pickOnBounds="true" preserveRatio="true">
                <image>
                   <Image url="@../../Resources/logout.png" />
@@ -78,7 +78,7 @@
                   <Cursor fx:constant="OPEN_HAND" />
                </cursor>
             </Button>
-            <Label fx:id="lblUser" alignment="CENTER" contentDisplay="CENTER" layoutX="580.0" layoutY="19.0" prefHeight="17.0" prefWidth="125.0" text="Usuario Logeado" textAlignment="CENTER">
+            <Label fx:id="lblUser" alignment="CENTER" contentDisplay="CENTER" layoutX="580.0" layoutY="19.0" prefHeight="17.0" prefWidth="125.0" textAlignment="CENTER">
                <font>
                   <Font name="System Bold Italic" size="12.0" />
                </font>

@@ -2,7 +2,7 @@ package servidor;
 
 import java.io.Serializable;
 
-public class Usuarios implements Serializable{
+public class Usuarios implements Serializable {
 	String username;
 	String password;
 	String name;
