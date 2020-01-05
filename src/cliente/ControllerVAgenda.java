@@ -47,6 +47,7 @@ public class ControllerVAgenda extends Controller {
 	private void initialize() {
 		server.setTablaContactos(tableView);
 		refresh(null);
+		lblUser.setText("Bienvenido " + getId().toUpperCase());
 	}
 
 	public ServidorAgenda getServer() {
@@ -74,7 +75,6 @@ public class ControllerVAgenda extends Controller {
 		if (selecionado != -1) {
 			mostrarVentana(event, (Node) event.getSource(), "Contacto.fxml", "Modificar Contacto", false, false,
 					selecionado);
-			refresh(event);
 		} else {
 			dialog(AlertType.WARNING, "Alerta", "No hay ninguna fila seleccionada",
 					"Seleccione una fila para continuar");
@@ -96,7 +96,7 @@ public class ControllerVAgenda extends Controller {
 					"¿Estas seguro de eliminar el numero: " + data);
 
 			if (option.get() == ButtonType.OK) {
-				server.borrarContacto(Integer.parseInt(data));
+				server.borrarContacto(Integer.parseInt(data), getId());
 				System.out.println("contacto con numero: " + data + " borrado");
 			}
 			refresh(null);
@@ -111,9 +111,7 @@ public class ControllerVAgenda extends Controller {
 		Optional<ButtonType> option = dialog(AlertType.CONFIRMATION, "Borrar contacto", "",
 				"¿Estas seguro de querer eliminar todos los contactos?, No habra vuelta atras");
 		if (option.get() == ButtonType.OK) {
-			if (server.borrarTodo("DELETE FROM contacts "
-					// + "WHERE ref_user LIKE'" + getUserLogged()
-					+ "'")) {
+			if (server.borrarTodo("DELETE FROM contacts WHERE ref_user LIKE'" + getId() + "'")) {
 				dialog(AlertType.INFORMATION, "Todos los contactos eliminados", "", "");
 				System.out.println("Todos los contactos borrados");
 			} else {
@@ -125,22 +123,17 @@ public class ControllerVAgenda extends Controller {
 
 	public void buscarContacto(ActionEvent event) {
 		try {
-			server.leerContactos("SELECT * FROM contacts WHERE "
-					// + "ref_user LIKE '" + getUserLogged()+ "' AND"
-					+ " name LIKE '%" + txtBuscarContacto.getText() + "%'", tableView, data);
+			server.leerContactos("SELECT * FROM contacts WHERE ref_user LIKE '" + getId() + "' AND" + " name LIKE '%"
+					+ txtBuscarContacto.getText() + "%'", tableView, data);
 		} catch (RemoteException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
 
 	public void refresh(ActionEvent event) {
 		try {
-			server.leerContactos("SELECT * FROM contacts "
-			// + "WHERE ref_user LIKE '" + getUserLogged() + "'"
-					, tableView, data);
+			server.leerContactos("SELECT * FROM contacts WHERE ref_user LIKE '" + getId() + "'", tableView, data);
 		} catch (RemoteException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}

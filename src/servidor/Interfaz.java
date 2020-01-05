@@ -4,9 +4,6 @@ import java.rmi.Remote;
 import java.rmi.RemoteException;
 import java.util.HashMap;
 
-import javafx.collections.ObservableList;
-import javafx.scene.control.TableView;
-
 public interface Interfaz extends Remote {
 
 	// Register user
@@ -14,7 +11,8 @@ public interface Interfaz extends Remote {
 			throws RemoteException;
 
 	// Modificar user
-	public boolean modificarUsuario(String password, String name, String surname) throws RemoteException;
+	public boolean modificarUsuario(String username, String password, String name, String surname)
+			throws RemoteException;
 
 	// Delete user
 	public boolean borrarUsuario(String username) throws RemoteException;
@@ -24,9 +22,7 @@ public interface Interfaz extends Remote {
 
 	// Lee de todos los contactos almacenados en la agenda.
 	// Ademas si en la query le pasas el nombre que quiere filtrar, tambien busca.
-	// public void leerContactos(String query,TableView tableView,
-	// ObservableList<ObservableList> data) throws RemoteException;
-
+	// public void leerContactos(String query,TableView tableView,ObservableList<ObservableList> data) throws RemoteException;
 	public HashMap<Integer, Contactos> leerHashContactos() throws RemoteException;
 
 	// insert contact
@@ -38,7 +34,7 @@ public interface Interfaz extends Remote {
 			throws RemoteException;
 
 	// Delete contact
-	public boolean borrarContacto(int movil) throws RemoteException;
+	public boolean borrarContacto(int movil, String ref_user) throws RemoteException;
 
 	// Delete all
 	public boolean borrarTodo(String query) throws RemoteException;

@@ -42,7 +42,7 @@ public class ControllerVUsuario extends Controller {
 
 	private void modificarUsuario() {
 		try {
-			server.modificarUsuario(txtNueva.getText(), txtName.getText(), txtSurname.getText());
+			server.modificarUsuario(getId(), txtNueva.getText(), txtName.getText(), txtSurname.getText());
 
 		} catch (RemoteException e) {
 			dialog(AlertType.WARNING, "Ha ocurrido algo", "Fallo modificando los datos",
@@ -51,7 +51,7 @@ public class ControllerVUsuario extends Controller {
 		}
 	}
 
-	public void guardar(ActionEvent event) {
+	public void clickGuardar(ActionEvent event) {
 		try {
 			if (txtAntigua.getText() != txtNueva.getText()) {
 				modificarUsuario();
@@ -69,14 +69,18 @@ public class ControllerVUsuario extends Controller {
 		// server.refreshContactos();
 	}
 
-	public void cancelar(ActionEvent event) {
+	public void clickCancelar(ActionEvent event) {
 		cancelar(event);
 	}
 
 	public void clickBorrar(ActionEvent event) {
-		/*
-		 * try { server.borrarUsuario(getUserLogged()); } catch (RemoteException e) {
-		 * e.printStackTrace(); }
-		 */
+		try {
+			server.borrarUsuario(getId());
+			Stage stage = (Stage) btnGuardar.getScene().getWindow();
+			stage.close();
+		} catch (RemoteException e) {
+			e.printStackTrace();
+		}
+
 	}
 }

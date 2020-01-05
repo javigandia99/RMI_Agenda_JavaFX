@@ -136,15 +136,15 @@ public class ServidorAgenda implements Interfaz, Remote {
 	}
 
 	@Override
-	public boolean modificarUsuario(String password, String name, String surname) throws RemoteException {
+	public boolean modificarUsuario(String username, String password, String name, String surname)
+			throws RemoteException {
 		boolean state;
 
-		String query = "UPDATE users SET password = ?, name = ?, surname = ?  WHERE username LIKE '"
-				+ correctUsername.toString() + "'";
+		String query = "UPDATE users SET password = ?, name = ?, surname = ?  WHERE username LIKE '" + username + "'";
 		try {
 			PreparedStatement stmt = conexione.prepareStatement(query);
 
-			stmt.setString(1, surname);
+			stmt.setString(1, password);
 			stmt.setString(2, name);
 			stmt.setString(3, surname);
 			stmt.executeUpdate();
@@ -213,7 +213,6 @@ public class ServidorAgenda implements Interfaz, Remote {
 	}
 
 	// AGENDA-CONTACTOS
-
 	/**
 	 * Permite llenar una tabla con consultas que no requieran de una comprobacion,
 	 * como obtener todos los datos de una tabla, o hacer una busqueda
@@ -370,11 +369,11 @@ public class ServidorAgenda implements Interfaz, Remote {
 	}
 
 	@Override
-	public boolean borrarContacto(int movil) {
+	public boolean borrarContacto(int movil, String ref_user) {
 		boolean state = false;
 		try {
 			if (notexistMovil(movil)) {
-				System.out.println("No existe el usuario escrito");
+				System.out.println("No existe el numero de movil en la base de datos");
 			} else {
 				String query = "DELETE FROM contacts WHERE movil LIKE ('" + movil + "')";
 				PreparedStatement stmt = conexione.prepareStatement(query);

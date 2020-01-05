@@ -40,7 +40,7 @@ public class ControllerVContacto extends Controller {
 	public void registrarContacto() throws SQLException {
 		if (server.notexistMovil(Integer.parseInt(txtMovil.getText()))) {
 			server.insertarContacto(txtName.getText(), txtSurname.getText(), Integer.parseInt(txtTelephone.getText()),
-					Integer.parseInt(txtMovil.getText()), "w");
+					Integer.parseInt(txtMovil.getText()), getId());
 		} else {
 			dialog(AlertType.INFORMATION, "Informacion", "Error",
 					"El contacto con el movil: '" + txtMovil.getText() + "' ya existe");
@@ -49,7 +49,7 @@ public class ControllerVContacto extends Controller {
 
 	private void modificarContacto() {
 		server.modificarContacto(txtName.getText(), txtSurname.getText(), Integer.parseInt(txtTelephone.getText()),
-				Integer.parseInt(txtMovil.getText()), "w");
+				Integer.parseInt(txtMovil.getText()), getId());
 	}
 
 	public void guardar(ActionEvent event) {

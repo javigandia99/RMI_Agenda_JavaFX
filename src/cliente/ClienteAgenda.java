@@ -52,6 +52,7 @@ public class ClienteAgenda extends Application {
 			System.out.println("ABRIENDO AGENDA DE CONTACTOS");
 			// lanzamos aplicacion visual
 			launch(args);
+			System.out.println("Agenda cerrada");
 
 		}
 	}

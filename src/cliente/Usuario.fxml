@@ -13,12 +13,12 @@
 	<center>
       		<AnchorPane prefHeight="400.0" prefWidth="450.0" BorderPane.alignment="CENTER">
       			<children>
-      				<Button fx:id="btnGuardar" alignment="CENTER" layoutX="248.0" layoutY="334.0" mnemonicParsing="false" onAction="#guardar" prefHeight="40.0" prefWidth="126.0" styleClass="buttonVerde" text="Guardar contacto" textFill="WHITE" AnchorPane.bottomAnchor="30.0" AnchorPane.rightAnchor="80.0">
+      				<Button fx:id="btnGuardar" alignment="CENTER" layoutX="248.0" layoutY="334.0" mnemonicParsing="false" onAction="#clickGuardar" prefHeight="40.0" prefWidth="126.0" styleClass="buttonVerde" text="Guardar contacto" textFill="WHITE" AnchorPane.bottomAnchor="30.0" AnchorPane.rightAnchor="80.0">
                <cursor>
                   <Cursor fx:constant="HAND" />
                </cursor>
             </Button>
-            <Button fx:id="btnCancelar" alignment="CENTER" layoutX="87.0" layoutY="334.0" mnemonicParsing="false" onAction="#cancelar" prefHeight="40.0" prefWidth="125.0" styleClass="buttonRojo" text="Cancelar" textFill="WHITE" AnchorPane.bottomAnchor="30.0" AnchorPane.leftAnchor="87.0">
+            <Button fx:id="btnCancelar" alignment="CENTER" layoutX="87.0" layoutY="334.0" mnemonicParsing="false" onAction="#clickCancelar" prefHeight="40.0" prefWidth="125.0" styleClass="buttonRojo" text="Cancelar" textFill="WHITE" AnchorPane.bottomAnchor="30.0" AnchorPane.leftAnchor="87.0">
                <cursor>
                   <Cursor fx:constant="HAND" />
                </cursor>

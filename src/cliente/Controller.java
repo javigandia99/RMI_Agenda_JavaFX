@@ -27,9 +27,8 @@ import javafx.util.Callback;
 import servidor.ServidorAgenda;
 
 public class Controller {
-	private FXMLLoader loader;
 	private ServidorAgenda server;
-
+	private static String userlogged;
 	private ObservableList<ObservableList> data;
 	static protected int selecionado;
 
@@ -44,7 +43,7 @@ public class Controller {
 	public Controller() {
 		ServidorAgenda server = new ServidorAgenda();
 		this.server = server;
-		loader = new FXMLLoader();
+		new FXMLLoader();
 		data = FXCollections.observableArrayList();
 
 	}
@@ -132,5 +131,14 @@ public class Controller {
 		data.clear();
 		tableView.getColumns().clear();
 		tableView.getItems().clear();
+	}
+
+	public String getusernameLogged(String myusername) {
+		userlogged = myusername;
+		return userlogged;
+	}
+
+	public String getId() {
+		return userlogged;
 	}
 }

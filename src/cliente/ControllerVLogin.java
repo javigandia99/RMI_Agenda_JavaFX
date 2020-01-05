@@ -19,7 +19,6 @@ public class ControllerVLogin extends Controller {
 	private Button btnLogin;
 	@FXML
 	private Button btnRegistrarUsuario;
-	private String myusername;
 
 	public ControllerVLogin() {
 		ServidorAgenda server = new ServidorAgenda();
@@ -31,8 +30,9 @@ public class ControllerVLogin extends Controller {
 	}
 
 	public void clickLogin(ActionEvent event) {
-		setMyusername(server.iniciarSesion(txtUsername.getText(), txtPassword.getText()));
+		server.iniciarSesion(txtUsername.getText(), txtPassword.getText());
 		if (server.isLogin()) {
+			getusernameLogged(txtUsername.getText());
 			mostrarVentana(event, (Node) event.getSource(), "Agenda.fxml", "Agenda de Contactos", false, true, -1);
 		} else {
 			dialog(AlertType.INFORMATION, "Informacion", "Error", "Usuario o contraseña incorrectos");
@@ -41,14 +41,5 @@ public class ControllerVLogin extends Controller {
 
 	public void clickRegistro(ActionEvent event) {
 		cambiarVentana(event, (Stage) ((Node) event.getSource()).getScene().getWindow(), "Registro.fxml", "Registro");
-	}
-
-	public String getMyusername() {
-		System.out.println(myusername);
-		return myusername;
-	}
-
-	public void setMyusername(String myusername) {
-		this.myusername = myusername;
 	}
 }
