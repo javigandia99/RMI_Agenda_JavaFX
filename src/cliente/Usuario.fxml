@@ -37,6 +37,7 @@
                </image>
             </ImageView>
             <Button fx:id="btnBorrar" layoutX="14.0" layoutY="21.0" mnemonicParsing="false" onAction="#clickBorrar" prefHeight="35.0" prefWidth="35.0" style="-fx-background-color: pink; -fx-border-color: red; -fx-border-radius: 100;" text="🗑" AnchorPane.leftAnchor="14.0" AnchorPane.topAnchor="21.0" />
+            <Label fx:id="lblResult" alignment="CENTER" contentDisplay="CENTER" layoutX="19.0" layoutY="291.0" opacity="0.5" prefHeight="21.0" prefWidth="421.0" text="TODOS LOS CAMPOS SON OBLIGATORIOS *" textAlignment="CENTER" />
       			</children>
       		</AnchorPane>
 	</center>

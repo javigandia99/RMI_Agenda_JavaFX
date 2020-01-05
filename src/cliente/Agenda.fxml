@@ -78,7 +78,7 @@
                   <Cursor fx:constant="OPEN_HAND" />
                </cursor>
             </Button>
-            <Label fx:id="lblUser" alignment="CENTER" contentDisplay="CENTER" layoutX="580.0" layoutY="19.0" prefHeight="17.0" prefWidth="125.0" textAlignment="CENTER">
+            <Label fx:id="lblUser" alignment="CENTER" contentDisplay="CENTER" layoutX="580.0" layoutY="19.0" prefHeight="35.0" prefWidth="125.0" textAlignment="CENTER">
                <font>
                   <Font name="System Bold Italic" size="12.0" />
                </font>

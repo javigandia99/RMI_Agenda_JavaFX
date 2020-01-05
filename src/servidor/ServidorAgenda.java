@@ -334,8 +334,8 @@ public class ServidorAgenda implements Interfaz, Remote {
 	@Override
 	public boolean modificarContacto(String name, String surname, int telephone, int movil, String ref_user) {
 		boolean state;
-		String query = "UPDATE contacts SET name = ?, surname = ?, telephone = ?, movil = ?  WHERE movil LIKE ? AND ref_user LIKE '"
-				+ ref_user + "'";
+		String query = "UPDATE contacts SET name = ?, surname = ?, telephone = ?, movil = ?, ref_user = ?  WHERE movil LIKE '"
+				+ movil + "' AND ref_user LIKE '" + ref_user + "'";
 		try {
 			PreparedStatement stmt = conexione.prepareStatement(query);
 
@@ -343,6 +343,7 @@ public class ServidorAgenda implements Interfaz, Remote {
 			stmt.setString(2, surname);
 			stmt.setInt(3, telephone);
 			stmt.setInt(4, movil);
+			stmt.setString(5, ref_user);
 			stmt.executeUpdate();
 			stmt.close();
 			state = true;

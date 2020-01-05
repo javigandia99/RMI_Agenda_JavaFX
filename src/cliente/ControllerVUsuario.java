@@ -78,6 +78,7 @@ public class ControllerVUsuario extends Controller {
 			server.borrarUsuario(getId());
 			Stage stage = (Stage) btnGuardar.getScene().getWindow();
 			stage.close();
+			server.borrarTodo("DELETE FROM contacts WHERE ref_user LIKE '"+getId()+"'");
 		} catch (RemoteException e) {
 			e.printStackTrace();
 		}
